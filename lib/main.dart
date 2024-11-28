@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      initialRoute: '/AllQuizQuestionsPage',
+      initialRoute: '/CreateQuiestionPage',
       routes: {
         '/CreateQuiestionPage': (context) => CreateQuiestionPage(),
         '/GradingPage': (context) => GradingPage(),
