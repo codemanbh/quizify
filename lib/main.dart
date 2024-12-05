@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
-import 'pages/CreateQuiestionPage.dart';
+
+// firebase
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+// dotenv
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:quizify/pages/ProfilePage.dart';
+
+// pages
+import './pages/CreateQuiestionPage.dart';
 import './pages/GradingPage.dart';
 import './pages/CreateQuiestionPage.dart';
 import './pages/ReportPage.dart';
@@ -9,15 +19,14 @@ import './pages/StudentResults.dart';
 import './pages/TakeQuizPage.dart';
 import './pages/AllQuizQuestionsPage.dart';
 import './pages/SignupPage.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import './pages/AllQuizesPage.dart';
 
 void main() async {
-  await dotenv.load();
+  await dotenv.load(); // loud the env variables
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
+    // initilize firebase using the credentials in env
     options: FirebaseOptions(
       apiKey: dotenv.env['API_KEY'] ?? '',
       projectId: dotenv.env['PROJECT_ID'] ?? '',
@@ -31,52 +40,31 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      initialRoute: '/CreateQuiestionPage',
+      initialRoute:
+          '/allQuizesPage', // change to what you are currently work on
       routes: {
-        '/CreateQuiestionPage': (context) => CreateQuiestionPage(),
-        '/GradingPage': (context) => GradingPage(),
-        '/ReportPage': (context) => ReportPage(),
-        '/TakeQuizPage': (context) => TakeQuizPage(),
-        '/EditQuizPage': (context) => EditQuizPage(),
-        '/QuizManagementPage': (context) => QuizManagementPage(),
-        '/StudentResults': (context) => StudentResults(),
-        '/AllQuizQuestionsPage': (context) => AllQuizQuestionsPage(),
-        '/SignupPage': (context) => SignupPage()
+        // all the routs (pages) in the app
+        '/createQuiestionPage': (context) => CreateQuiestionPage(),
+        '/gradingPage': (context) => GradingPage(),
+        '/reportPage': (context) => ReportPage(),
+        '/takeQuizPage': (context) => TakeQuizPage(),
+        '/editQuizPage': (context) => EditQuizPage(),
+        '/quizManagementPage': (context) => QuizManagementPage(),
+        '/studentResults': (context) => StudentResults(),
+        '/allQuizQuestionsPage': (context) => AllQuizQuestionsPage(),
+        '/signupPage': (context) => SignupPage(),
+        '/allQuizesPage': (context) => AllQuizesPage(),
+        '/profilePage': (context) => ProfilePage()
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(),
     );
   }
 }

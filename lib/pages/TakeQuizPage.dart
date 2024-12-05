@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/CustomNavBar.dart';
 
 class TakeQuizPage extends StatefulWidget {
   const TakeQuizPage({super.key});
@@ -10,6 +11,14 @@ class TakeQuizPage extends StatefulWidget {
 class _TakeQuizPageState extends State<TakeQuizPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    Map<String, dynamic>? args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    String title = args?['title'] ?? "<title not found>";
+    return Scaffold(
+      bottomNavigationBar: CustomNavBar(),
+      appBar: AppBar(
+        title: Text(title), // change later to quiz name
+      ),
+    );
   }
 }

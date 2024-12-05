@@ -19,19 +19,6 @@ class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
   @override
   void initState() {
     super.initState();
-    final apiKey = dotenv.env['API_KEY'] ?? 'No API Key Found';
-    print(apiKey);
-    // List<Widget> quiestionTypesRadio = Question.allQuiestionTypes
-    //     .map((e) => RadioListTile(
-    //         value: e['value'],
-    //         title: Text(e['title']),
-    //         groupValue: quiestionType,
-    //         onChanged: (v) {
-    //           if (v != null) {
-    //             quiestionType = v;
-    //           }
-    //         }))
-    //     .toList();
   }
 
   @override
