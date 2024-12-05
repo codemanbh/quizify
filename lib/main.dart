@@ -8,8 +8,24 @@ import './pages/QuizManagementPage.dart';
 import './pages/StudentResults.dart';
 import './pages/TakeQuizPage.dart';
 import './pages/AllQuizQuestionsPage.dart';
+import './pages/SignupPage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  await dotenv.load();
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+      apiKey: dotenv.env['API_KEY'] ?? '',
+      projectId: dotenv.env['PROJECT_ID'] ?? '',
+      messagingSenderId: dotenv.env['MESSAGING_SENDER_ID'] ?? '',
+      appId: dotenv.env['APP_ID'] ?? '',
+    ),
+  );
+
   runApp(const MyApp());
 }
 
@@ -30,7 +46,8 @@ class MyApp extends StatelessWidget {
         '/EditQuizPage': (context) => EditQuizPage(),
         '/QuizManagementPage': (context) => QuizManagementPage(),
         '/StudentResults': (context) => StudentResults(),
-        '/AllQuizQuestionsPage': (context) => AllQuizQuestionsPage()
+        '/AllQuizQuestionsPage': (context) => AllQuizQuestionsPage(),
+        '/SignupPage': (context) => SignupPage()
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -59,8 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body:
-          Center(), // This trailing comma makes auto-formatting nicer for build methods.
+      body: Center(),
     );
   }
 }

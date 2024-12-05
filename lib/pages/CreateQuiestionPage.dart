@@ -4,6 +4,7 @@ import '../../models/Question.dart';
 import '../../components/TrueFalse.dart';
 import '../../components/MCQ.dart';
 import '../../components/MCQ.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CreateQuiestionPage extends StatefulWidget {
   const CreateQuiestionPage({super.key});
@@ -14,10 +15,12 @@ class CreateQuiestionPage extends StatefulWidget {
 
 class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
   String quiestionType = Question.allQuiestionTypes[0]['value'];
-  // List<Widget> quiestionTypesRadio = [];
+
   @override
   void initState() {
     super.initState();
+    final apiKey = dotenv.env['API_KEY'] ?? 'No API Key Found';
+    print(apiKey);
     // List<Widget> quiestionTypesRadio = Question.allQuiestionTypes
     //     .map((e) => RadioListTile(
     //         value: e['value'],
