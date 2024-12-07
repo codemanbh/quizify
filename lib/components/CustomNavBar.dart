@@ -15,7 +15,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
     List pages = ['/profilePage', '/allQuizesPage'];
     return BottomNavigationBar(
         onTap: (index) {
-          Navigator.of(context).pushNamed(pages[index]);
+          Navigator.of(context).pushReplacementNamed(pages[index]);
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'account'),

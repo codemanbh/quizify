@@ -14,7 +14,7 @@ class CreateQuiestionPage extends StatefulWidget {
 }
 
 class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
-  String quiestionType = Question.allQuiestionTypes[0]['value'];
+  String quiestionType = Question.allQuestionTypes[0]['value'];
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
               style: TextStyle(fontSize: 16),
             ),
             Column(
-              children: Question.allQuiestionTypes
+              children: Question.allQuestionTypes
                   .map((e) => RadioListTile(
                         value: e['value'],
                         title: Text(e['title']),

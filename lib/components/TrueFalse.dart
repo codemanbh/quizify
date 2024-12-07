@@ -14,17 +14,19 @@ class _TrueFalseState extends State<TrueFalse> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: Question.TrueFalseValues.map((e) => RadioListTile(
-            value: e['value'],
-            title: Text(e['title']),
-            groupValue: selectedAnswer,
-            onChanged: (v) {
-              if (v != null) {
-                selectedAnswer = v;
-                setState(() {});
-              }
-            },
-          )).toList(),
+      children: Question.trueFalseValues
+          .map((e) => RadioListTile(
+                value: e['value'],
+                title: Text(e['title']),
+                groupValue: selectedAnswer,
+                onChanged: (v) {
+                  if (v != null) {
+                    selectedAnswer = v;
+                    setState(() {});
+                  }
+                },
+              ))
+          .toList(),
     );
   }
 }
