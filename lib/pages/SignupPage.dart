@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -60,8 +61,10 @@ class SignupPage extends StatelessWidget {
                       prefixIcon: const Icon(Icons.person),
                     ),
                     validator: (value) {
-                      if(value!.isEmpty)
-                      return "username can not be empty";
+                      if(value!.isEmpty) {
+                        return "username can not be empty";
+                      }
+                      return null;
                     },
                   ),
                   const SizedBox(height: 20),
@@ -118,35 +121,46 @@ class SignupPage extends StatelessWidget {
                   ),
                 ],
               ),
-              ElevatedButton(
-                onPressed: () {
-             if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-  createUser(emailController.text, passwordController.text);
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-      content: Text('Your email has been created successfully'),
-    ),
-  );
-} else {
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-      content: Text('there is some issues with creating your email please fix the requirment input'),
-      duration: Duration(seconds: 7),
-    ),
-  );
-}
-
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: const StadiumBorder(),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Colors.purple,
-                ),
-                child: const Text(
-                  "Sign up",
-                  style: TextStyle(fontSize: 20, color: Colors.white),
-                ),
-              ),
+         ElevatedButton(
+  onPressed: () async {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      // Create the user first
+      User? user = await createUser(emailController.text, passwordController.text);
+      if (user != null) {
+        // If user creation is successful, add user data to Firestore
+         AddUsers(usernameController.text);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Your email has been created successfully'),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error in creating user. Please try again.'),
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('There are issues with creating your email. Please fix the required inputs.'),
+          duration: Duration(seconds: 7),
+        ),
+      );
+    }
+  },
+  style: ElevatedButton.styleFrom(
+    shape: const StadiumBorder(),
+    padding: const EdgeInsets.symmetric(vertical: 16),
+    backgroundColor: Colors.purple,
+  ),
+  child: const Text(
+    "Sign up",
+    style: TextStyle(fontSize: 20, color: Colors.white),
+  ),
+)
+,
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -213,4 +227,34 @@ String? validatePass(String? pass) {
     return "Password is not strong enough. Add uppercase, lowercase, numbers, and special characters.";
   }
   return null;
+}
+void AddUsers(String username) async {
+  try {
+    final User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      print("User is not authenticated.");
+      return;
+    }
+    final String email = user.email ?? "Unknown Email";  // Handle null email
+    final String role = "Student";
+    final String uid = user.uid;
+
+    DocumentReference docRef = FirebaseFirestore.instance.collection("users").doc(uid);
+    Map<String, dynamic> userData = {
+      "name" :username,
+      "email": email,  // You could also add a name if available
+      "role": role,
+    };
+
+    await docRef.set(userData)
+      .then((value) {
+        print("Added user with email: $email");
+      })
+      .catchError((e) {
+        print("Error adding user to Firestore: $e");
+      });
+  } catch (e) {
+    print("There might be a problem due to: $e");
+  }
 }

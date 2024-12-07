@@ -11,7 +11,6 @@ import 'package:quizify/pages/ProfilePage.dart';
 // pages
 import './pages/CreateQuiestionPage.dart';
 import './pages/GradingPage.dart';
-import './pages/CreateQuiestionPage.dart';
 import './pages/ReportPage.dart';
 import './pages/EditQuizPage.dart';
 import './pages/QuizManagementPage.dart';

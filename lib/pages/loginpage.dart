@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quizify/pages/AllQuizQuestionsPage.dart';
+import 'package:quizify/pages/CreateQuiestionPage.dart';
 import 'package:quizify/pages/SignupPage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class loginPage extends StatefulWidget {
   loginPage({super.key});
@@ -162,10 +164,8 @@ class _loginPageState extends State<loginPage> {
       AuthService authSrv = AuthService();
       User? user = await authSrv.signIn(mail, pass);
       if (user != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => AllQuizQuestionsPage()),
-        );
+    fetchUserRole(context);
+        
       } else {
         setState(() {
           errorMessage = "The email or password is incorrect";
@@ -199,3 +199,40 @@ class AuthService {
     }
   }
 }
+
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+Future<String?> fetchUserRole(BuildContext context) async {
+  try {
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      // Fetch the user's document from Firestore
+      DocumentSnapshot doc =
+          await _firestore.collection('users').doc(user.uid).get();
+
+      if (doc.exists) {
+        if(doc.get('role')=="Student"){
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => AllQuizQuestionsPage()),
+        );
+
+        }
+        else if(doc.get('role')=="Admin"){
+             Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => CreateQuiestionPage()),
+        );
+        }
+      }
+    }
+  } catch (e) {
+    print("Error fetching user role: $e");
+  }
+  return null; // Return null if the role is not found
+}
+
+
+
