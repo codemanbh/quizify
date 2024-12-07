@@ -162,10 +162,7 @@ class _loginPageState extends State<loginPage> {
       AuthService authSrv = AuthService();
       User? user = await authSrv.signIn(mail, pass);
       if (user != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => AllQuizQuestionsPage()),
-        );
+        Navigator.of(context).pushReplacementNamed('/profilePage');
       } else {
         setState(() {
           errorMessage = "The email or password is incorrect";
