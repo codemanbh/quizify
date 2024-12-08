@@ -18,32 +18,37 @@ class CreateQuiestionPage extends StatefulWidget {
 }
 
 class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
-  String quiestionType = Question.allQuestionTypes[0]['value'];
-  int selectedIndex = 0;
+  late Quiz quiz; // Declare the quiz object
+
   int seletedQuestionIndex = 0;
 
-  TextEditingController writtenCorrectAnswerController =
-      TextEditingController();
-
+  late TextEditingController writtenCorrectAnswerController;
   late TextEditingController question_text_controller; // Declare the controller
-  late Quiz quiz; // Declare the quiz object
 
   @override
   void initState() {
     super.initState();
-    // Initialize quiz and controller
+
     quiz = placeHolderQuizzes.quiz1;
+
     question_text_controller = TextEditingController(
       text: quiz.questions[seletedQuestionIndex].question_text,
     );
+
+    writtenCorrectAnswerController = TextEditingController(
+        text: quiz.questions[seletedQuestionIndex].writtenCorrectAnswer);
   }
 
   void saveCurrentEditedQuestion() {
     quiz.questions[seletedQuestionIndex].question_text =
         question_text_controller.text;
+
     switch (quiz.questions[seletedQuestionIndex].question_type) {
       case 'TF':
+        // quiz.questions[seletedQuestionIndex].tfCorrectAnswer = newTFAnswer;
+        print(quiz.questions[seletedQuestionIndex].tfCorrectAnswer);
         break;
+
       case 'MCQ':
         break;
 
@@ -58,39 +63,31 @@ class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
   }
 
   void changeCurrentEditedQuestion(int index) {
-    writtenCorrectAnswerController.text =
-        quiz.questions[index].writtenCorrectAnswer ?? "";
-    question_text_controller.text = quiz.questions[index].question_text;
     seletedQuestionIndex = index; // Update the selected question index
+
+    writtenCorrectAnswerController.text =
+        quiz.questions[seletedQuestionIndex].writtenCorrectAnswer ?? "";
+    question_text_controller.text =
+        quiz.questions[seletedQuestionIndex].question_text;
 
     setState(() {});
   }
 
-  // void changeQuestionType(String newType){
-  //   quiz.questions[seletedQuestionIndex].question_type = ;
-  // }
+  List<Widget> getListOfQuestions() {
+    List<Widget> temp = quiz.questions
+        .asMap()
+        .map((index, question) =>
+            MapEntry(index, Container(child: Text((index + 1).toString()))))
+        .values
+        .toList();
 
-  @override
-  void dispose() {
-    question_text_controller.dispose(); // Dispose of the controller
-    super.dispose();
+    temp.add(Container(child: Icon(Icons.add)));
+
+    return temp;
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> getListOfQuestions() {
-      List<Widget> temp = quiz.questions
-          .asMap()
-          .map((index, question) =>
-              MapEntry(index, Container(child: Text((index + 1).toString()))))
-          .values
-          .toList();
-
-      temp.add(Container(child: Icon(Icons.add)));
-
-      return temp;
-    }
-
     List<Widget> listOfQuestions = getListOfQuestions();
 
     return Scaffold(
@@ -146,12 +143,13 @@ class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
             'TF' == quiz.questions[seletedQuestionIndex].question_type
                 ? TrueFalse(
                     selectedAnswer:
-                        quiz.questions[seletedQuestionIndex].tfSelectedAnswer ??
+                        quiz.questions[seletedQuestionIndex].tfCorrectAnswer ??
                             false,
                     onAnswerChanged: (newTFAnswer) {
-                      quiz.questions[seletedQuestionIndex].tfSelectedAnswer =
+                      quiz.questions[seletedQuestionIndex].tfCorrectAnswer =
                           newTFAnswer;
-                    })
+                    },
+                  )
                 : SizedBox(),
             'MCQ' == quiz.questions[seletedQuestionIndex].question_type
                 ? MCQ()
@@ -162,7 +160,7 @@ class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
                   )
                 : SizedBox(),
             ElevatedButton(
-                onPressed: saveCurrentEditedQuestion,
+                onPressed: () => saveCurrentEditedQuestion(),
                 child: Text('save question')),
             ElevatedButton(onPressed: () {}, child: Text('finish')),
           ],
