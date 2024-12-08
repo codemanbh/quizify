@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:quizify/components/AdminCustom.dart';
 import 'package:quizify/components/Written.dart';
 import '../../models/Question.dart';
 import '../../components/TrueFalse.dart';
 import '../../components/MCQ.dart';
 import '../../components/MCQ.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../components/CustomNavBar.dart';
 
 class CreateQuiestionPage extends StatefulWidget {
   const CreateQuiestionPage({super.key});
@@ -24,6 +26,7 @@ class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: AdminCustom(),
       appBar: AppBar(
         title: Text('Add question'),
       ),

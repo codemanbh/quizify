@@ -1,11 +1,13 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 // firebase
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 // dotenv
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:quizify/pages/AdminProfilePage.dart';
 import 'package:quizify/pages/ProfilePage.dart';
 
 // pages
@@ -19,7 +21,8 @@ import './pages/TakeQuizPage.dart';
 import './pages/AllQuizQuestionsPage.dart';
 import './pages/SignupPage.dart';
 import './pages/AllQuizesPage.dart';
-import './pages/loginpage.dart';
+import './pages/TestPage.dart';
+import './pages/LoginPage.dart';
 
 void main() async {
   await dotenv.load(); // loud the env variables
@@ -44,7 +47,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      initialRoute: '/loginPage', // change to what you are currently work on
+      initialRoute: '/signupPage', // change to what you are currently work on
       routes: {
         // all the routs (pages) in the app
         '/createQuiestionPage': (context) => CreateQuiestionPage(),
@@ -58,7 +61,9 @@ class MyApp extends StatelessWidget {
         '/signupPage': (context) => SignupPage(),
         '/allQuizesPage': (context) => AllQuizesPage(),
         '/profilePage': (context) => ProfilePage(),
-        '/loginPage': (context) => loginPage()
+        '/loginPage': (context) => LoginPage(),
+        // '/testPage': (context) =>
+        '/AdminProfilePage': (context) => AdminProfilePage()
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

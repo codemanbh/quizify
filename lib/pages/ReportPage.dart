@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/CustomNavBar.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});
@@ -10,6 +11,11 @@ class ReportPage extends StatefulWidget {
 class _ReportPageState extends State<ReportPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Report'),
+      ),
+      bottomNavigationBar: CustomNavBar(),
+    );
   }
 }

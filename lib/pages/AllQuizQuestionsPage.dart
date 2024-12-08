@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/Question.dart';
 import '../../models/Quiz.dart';
+import '../components/CustomNavBar.dart';
 
 class AllQuizQuestionsPage extends StatefulWidget {
   const AllQuizQuestionsPage({super.key});
@@ -13,6 +14,7 @@ class _AllQuizQuestionsPageState extends State<AllQuizQuestionsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: CustomNavBar(),
       appBar: AppBar(
         title: Text('Quiz questions'),
       ),

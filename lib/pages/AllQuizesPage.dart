@@ -29,8 +29,8 @@ class _AllQuizesPageState extends State<AllQuizesPage> {
                     onPressed: () {
                       Navigator.of(context).pop();
 
-                      Navigator.of(context).pushNamed('/takeQuizPage',
-                          arguments: {'title': 'quiz1'});
+                      Navigator.of(context)
+                          .pushNamed('/takeQuizPage', arguments: {'qid': '1'});
                     },
                     child: Text('Enter exam'))
               ]);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/CustomNavBar.dart';
 
 class StudentResults extends StatefulWidget {
   const StudentResults({super.key});
@@ -10,6 +11,8 @@ class StudentResults extends StatefulWidget {
 class _StudentResultsState extends State<StudentResults> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      bottomNavigationBar: CustomNavBar(),
+    );
   }
 }
