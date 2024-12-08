@@ -7,7 +7,7 @@ class StudentAnswer {
   String quizID = "";
   List<Map<String, dynamic>> StudentAnswers = [];
 
-  saveAnswers(String newStudentID, Quiz quiz) {
+  getAnswersMap(String newStudentID, Quiz quiz) {
     studentID = newStudentID;
     quizID = quiz.id;
     StudentAnswers =

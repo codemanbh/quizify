@@ -10,7 +10,7 @@ class Question {
   String question_type = "";
   String question_text = "";
   List<String> possible_answers = [];
-  List<String> correct_answer = [];
+  String? correct_answer = null;
   double grade = 0;
   bool isRequired = false;
   bool? tfSelectedAnswer;
@@ -26,35 +26,57 @@ class Question {
       case "TF":
         return tfSelectedAnswer;
       case "WRITTEN":
-        return correct_answer.isNotEmpty ? correct_answer.first : null;
+        return correct_answer;
       default:
         return null; // Unsupported question type
     }
   }
 
+  bool equalsIgnoreCase(String? string1, String? string2) {
+    return string1?.toLowerCase() == string2?.toLowerCase();
+  }
+
   Map<String, dynamic> getSelectedMap() {
-    print("qestionid: ${id}");
+    // print("questionid: ${id}");
     Map<String, dynamic> selectedMap = {
       "questionID": id,
       "question_type": question_type,
-      "correct_answer": correct_answer.isNotEmpty ? correct_answer[0] : null,
-      // "grade":
+      "correct_answer": correct_answer,
     };
 
+    // Assign grade based on the selected answer
+    double selectedGrade = 0;
     switch (question_type) {
       case "MCQ":
-        selectedMap["selected_answer_mcq"] = mcqSelectedAnswer != null
-            ? possible_answers[mcqSelectedAnswer!]
-            : null;
+        if (mcqSelectedAnswer != null) {
+          selectedMap["selected_answer_mcq"] =
+              possible_answers[mcqSelectedAnswer!];
+          // Check if the selected answer is correct
+          if (possible_answers[mcqSelectedAnswer!] == correct_answer) {
+            selectedGrade = grade; // Full grade if correct
+          }
+        }
         break;
       case "TF":
+        print("correct_answer[0]: ${correct_answer.runtimeType}");
         selectedMap["selected_answer_tf"] = tfSelectedAnswer;
+        // Check if the selected answer is correct
+
+        if (equalsIgnoreCase(correct_answer, tfSelectedAnswer.toString())) {
+          selectedGrade = grade; // Full grade if correct
+        }
         break;
       case "WRITTEN":
         selectedMap["selected_answer_written"] = writtenAnswer;
+        // No grade assigned for WRITTEN type questions
         break;
       default:
         selectedMap["selected_answer"] = null; // Handle unsupported types
+    }
+
+    // Add the grade to the map only for MCQ and TF questions
+    if (question_type == "MCQ" || question_type == "TF") {
+      selectedMap["grade"] = selectedGrade;
     }
 
     return selectedMap;
@@ -101,7 +123,7 @@ class Question {
       case "TF":
         return TrueFalseWidget(
           questionText: question_text,
-          selectedValue: tfSelectedAnswer,
+          selectedValue: tfSelectedAnswer == 'True',
           onValueSelected: (value) {
             tfSelectedAnswer = value;
           },
@@ -109,9 +131,9 @@ class Question {
       case "WRITTEN":
         return WrittenWidget(
           questionText: question_text,
-          initialAnswer: correct_answer.isNotEmpty ? correct_answer.first : '',
+          initialAnswer: correct_answer,
           onAnswerChanged: (value) {
-            correct_answer = [value];
+            correct_answer = value;
           },
         );
       default:
@@ -121,13 +143,13 @@ class Question {
 
   /// Convert Map to Question
   static Question fromMap(Map<String, dynamic> data) {
-    print(data);
+    // print(data);
     return Question()
       ..quizId = data['quizId'] ?? ''
       ..question_type = data['question_type'] ?? ''
       ..question_text = data['question_text'] ?? ''
       ..possible_answers = List<String>.from(data['possible_answers'] ?? [])
-      ..correct_answer = List<String>.from(data['correct_answer'] ?? [])
+      ..correct_answer = data['correct_answer']
       ..grade = (data['grade'] ?? 0).toDouble()
       ..isRequired = data['isRequired'] ?? false;
   }
