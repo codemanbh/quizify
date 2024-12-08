@@ -35,7 +35,7 @@ class _TakeQuizPageState extends State<TakeQuizPage> {
     // print(qid);
 
     // quiz = await Quiz.retrieveFromDB('1');
-    quiz = placeHolderQuizes.quiz1;
+    quiz = placeHolderQuizzes.quiz1;
 
     // print("asdasdadas" + quiz.title);
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;

@@ -44,7 +44,7 @@ class Quiz {
       "studentID": studentID,
       "quizID": id,
       "studentAnswers":
-          questions.map((question) => question.getSelectedMap()).toList()
+          questions.map((question) => question.questionToMap()).toList()
     };
   }
 
@@ -91,8 +91,9 @@ class Quiz {
     final questionSnapshot =
         await questionCollection.where('quizId', isEqualTo: quizId).get();
     quiz.questions = questionSnapshot.docs.map((doc) {
-      Question newQuestion = Question.fromMap(doc.data());
-      newQuestion.id = doc.id;
+      Question newQuestion = Question();
+      newQuestion.fromMap(doc.data());
+
       return newQuestion;
     }).toList();
 

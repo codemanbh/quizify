@@ -3,27 +3,30 @@ import 'package:flutter/material.dart';
 class MCQWidget extends StatefulWidget {
   final String questionText;
   final List<String> possibleAnswers;
-  final int? selectedAnswer;
-  final ValueChanged<int> onAnswerSelected;
+  final String selectedAnswer;
+  final ValueChanged<String>
+      onAnswerSelected; // Fix: Changed to match the type of selectedAnswer
 
   MCQWidget({
     required this.questionText,
     required this.possibleAnswers,
     required this.selectedAnswer,
     required this.onAnswerSelected,
-  });
+    Key? key, // Fix: Added the key parameter
+  }) : super(key: key);
 
   @override
   _MCQWidgetState createState() => _MCQWidgetState();
 }
 
 class _MCQWidgetState extends State<MCQWidget> {
-  int? _selectedAnswer;
+  String? _selectedAnswer;
 
   @override
   void initState() {
     super.initState();
-    _selectedAnswer = widget.selectedAnswer;
+    _selectedAnswer =
+        widget.selectedAnswer; // Initialize with the provided selected answer
   }
 
   @override
@@ -33,18 +36,22 @@ class _MCQWidgetState extends State<MCQWidget> {
       children: [
         Text(
           widget.questionText,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         for (var i = 0; i < widget.possibleAnswers.length; i++)
-          RadioListTile<int>(
+          RadioListTile<String>(
             title: Text(widget.possibleAnswers[i]),
-            value: i,
-            groupValue: _selectedAnswer,
+            value: widget
+                .possibleAnswers[i], // Fix: Use the correct value from the list
+            groupValue:
+                _selectedAnswer, // This ensures the selected answer is highlighted
             onChanged: (value) {
               setState(() {
-                _selectedAnswer = value;
+                _selectedAnswer = value; // Update the state with the new value
               });
-              if (value != null) widget.onAnswerSelected(value);
+              if (value != null) {
+                widget.onAnswerSelected(value); // Notify the parent widget
+              }
             },
           ),
       ],

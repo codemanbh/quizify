@@ -32,7 +32,7 @@ class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
   void initState() {
     super.initState();
     // Initialize quiz and controller
-    quiz = placeHolderQuizes.quiz1;
+    quiz = placeHolderQuizzes.quiz1;
     question_text_controller = TextEditingController(
       text: quiz.questions[seletedQuestionIndex].question_text,
     );
@@ -48,7 +48,7 @@ class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
         break;
 
       case 'WRITTEN':
-        quiz.questions[seletedQuestionIndex].correct_answer =
+        quiz.questions[seletedQuestionIndex].writtenCorrectAnswer =
             writtenCorrectAnswerController.value.text;
 
         break;
@@ -59,7 +59,7 @@ class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
 
   void changeCurrentEditedQuestion(int index) {
     writtenCorrectAnswerController.text =
-        quiz.questions[index].correct_answer ?? "";
+        quiz.questions[index].writtenCorrectAnswer ?? "";
     question_text_controller.text = quiz.questions[index].question_text;
     seletedQuestionIndex = index; // Update the selected question index
 
@@ -144,7 +144,14 @@ class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: VerticalDivider()),
             'TF' == quiz.questions[seletedQuestionIndex].question_type
-                ? TrueFalse()
+                ? TrueFalse(
+                    selectedAnswer:
+                        quiz.questions[seletedQuestionIndex].tfSelectedAnswer ??
+                            false,
+                    onAnswerChanged: (newTFAnswer) {
+                      quiz.questions[seletedQuestionIndex].tfSelectedAnswer =
+                          newTFAnswer;
+                    })
                 : SizedBox(),
             'MCQ' == quiz.questions[seletedQuestionIndex].question_type
                 ? MCQ()

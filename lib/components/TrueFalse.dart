@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:quizify/models/Question.dart';
 
 class TrueFalse extends StatefulWidget {
   const TrueFalse({
     super.key,
-    required this.trueLabel,
-    required this.falseLabel,
     required this.selectedAnswer,
     required this.onAnswerChanged,
   });
 
-  final String trueLabel; // Text for the true option
-  final String falseLabel; // Text for the false option
-  final bool selectedAnswer; // Current selected value
-  final ValueChanged<bool> onAnswerChanged; // Callback for changes
+  // Pass the initial answer state and a callback for changes
+  final bool selectedAnswer;
+  final ValueChanged<bool> onAnswerChanged;
 
   @override
   State<TrueFalse> createState() => _TrueFalseState();
@@ -37,28 +35,18 @@ class _TrueFalseState extends State<TrueFalse> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        RadioListTile<bool>(
-          value: true,
-          title: Text(widget.trueLabel), // Custom true label
-          groupValue: selectedAnswer,
-          onChanged: (value) {
-            if (value != null) {
-              updateAnswer(value);
-            }
-          },
-        ),
-        RadioListTile<bool>(
-          value: false,
-          title: Text(widget.falseLabel), // Custom false label
-          groupValue: selectedAnswer,
-          onChanged: (value) {
-            if (value != null) {
-              updateAnswer(value);
-            }
-          },
-        ),
-      ],
+      children: Question.trueFalseValues
+          .map((e) => RadioListTile<bool>(
+                value: e['value'],
+                title: Text(e['title']),
+                groupValue: selectedAnswer,
+                onChanged: (value) {
+                  if (value != null) {
+                    updateAnswer(value);
+                  }
+                },
+              ))
+          .toList(),
     );
   }
 }
