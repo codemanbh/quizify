@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizify/components/AdminCustom.dart';
 import 'package:quizify/components/Written.dart';
 import '../../models/Question.dart';
 import '../../components/TrueFalse.dart';
@@ -24,13 +25,19 @@ class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+            bottomNavigationBar: AdminCustom(),
       appBar: AppBar(
+        
+        
         title: Text('Add question'),
+        
       ),
       body: Container(
+        
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
+
             Text(
               'Quiestion type',
               style: TextStyle(fontSize: 16),

@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:quizify/pages/loginpage.dart';
+import 'package:quizify/pages/LoginPage.dart';
 
 class SignupPage extends StatelessWidget {
   const SignupPage({super.key});
@@ -169,7 +168,7 @@ class SignupPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushReplacement(
   context,
-  MaterialPageRoute(builder: (context) => loginPage()),
+  MaterialPageRoute(builder: (context) => LoginPage()),
 );      
                     },
                     child: const Text(
