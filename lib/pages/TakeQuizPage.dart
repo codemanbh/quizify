@@ -30,7 +30,7 @@ class _TakeQuizPageState extends State<TakeQuizPage> {
 
     // print(qid);
 
-    // quiz = await Quiz.retrieveFromDB('1');
+    quiz = await Quiz.retrieveFromDB('1');
     // print("asdasdadas" + quiz.title);
 
     setState(() {});

@@ -25,14 +25,22 @@ class _EnterQuizIdPageState extends State<EnterQuizIdPage> {
         title: Text('Take Quiz'),
       ),
       bottomNavigationBar: CustomNavBar(),
-      body: Column(
-        children: [
-          Text("Enter quiz ID to take the quiz"),
-          TextField(
-            controller: qidCtr,
+      body: Container(
+        margin: EdgeInsets.all(20),
+        child: Center(
+          child: SizedBox(
+            height: 200,
+            child: Column(
+              children: [
+                Text("Enter quiz ID to take the quiz"),
+                TextField(
+                  controller: qidCtr,
+                ),
+                TextButton(onPressed: takeQuiz, child: Text('Enter quiz'))
+              ],
+            ),
           ),
-          TextButton(onPressed: takeQuiz, child: Text('Enter quiz'))
-        ],
+        ),
       ),
     );
   }
