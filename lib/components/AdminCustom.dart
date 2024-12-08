@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../pages/AdminProfilePage.dart';
-import '../pages/CreateQuiestionPage.dart';
 
 class AdminCustom extends StatefulWidget {
   const AdminCustom({super.key});
@@ -18,8 +16,8 @@ class _AdminCustom extends State<AdminCustom> {
           Navigator.of(context).pushReplacementNamed(pages[index]);
         },
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'account'),
-          BottomNavigationBarItem(icon: Icon(Icons.web), label: 'Question')
+         BottomNavigationBarItem(icon: Icon(Icons.web), label: 'Question'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'account')
         ]);
   }
 }

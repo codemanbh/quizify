@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../pages/ProfilePage.dart';
-import '../pages/TakeQuizPage.dart';
 
 class CustomNavBar extends StatefulWidget {
   const CustomNavBar({super.key});
