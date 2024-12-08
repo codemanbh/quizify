@@ -21,6 +21,7 @@ import './pages/TakeQuizPage.dart';
 import './pages/AllQuizQuestionsPage.dart';
 import './pages/SignupPage.dart';
 import './pages/AllQuizesPage.dart';
+import './pages/TestPage.dart';
 import './pages/LoginPage.dart';
 
 void main() async {
@@ -61,8 +62,8 @@ class MyApp extends StatelessWidget {
         '/allQuizesPage': (context) => AllQuizesPage(),
         '/profilePage': (context) => ProfilePage(),
         '/loginPage': (context) => LoginPage(),
+        // '/testPage': (context) =>
         '/AdminProfilePage': (context) => AdminProfilePage()
-
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

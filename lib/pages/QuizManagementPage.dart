@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/CustomNavBar.dart';
 
 class QuizManagementPage extends StatefulWidget {
   const QuizManagementPage({super.key});
@@ -10,6 +11,8 @@ class QuizManagementPage extends StatefulWidget {
 class _QuizManagementPageState extends State<QuizManagementPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      bottomNavigationBar: CustomNavBar(),
+    );
   }
 }

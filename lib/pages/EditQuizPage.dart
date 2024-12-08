@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import '../components/CustomNavBar.dart';
+import '../models/Quiz.dart';
 import 'package:quizify/components/CustomNavBar.dart';
 
 class EditQuizPage extends StatefulWidget {
@@ -21,7 +23,7 @@ class _EditQuizPageState extends State<EditQuizPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz questions'),
+        title: Text('Edit Quiz'),
       ),
       bottomNavigationBar: CustomNavBar(),
       body: Column(

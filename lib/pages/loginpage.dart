@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController EmailCtrl = TextEditingController();
   final TextEditingController passwordCtrl = TextEditingController();
-  String? errorMessage; 
+  String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
               _header(context),
               _inputField(context),
               _forgotPassword(context),
-              if (errorMessage != null) _errorMessage(context),  
+              if (errorMessage != null) _errorMessage(context),
               _signup(context),
             ],
           ),
@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
 
   _inputField(context) {
     return Form(
-      key: _formKey,  
+      key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -140,10 +140,7 @@ class _LoginPageState extends State<LoginPage> {
         const Text("Don't have an account? "),
         TextButton(
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => SignupPage()),
-            );
+            Navigator.of(context).pushReplacementNamed('/signupPage');
           },
           child: const Text(
             "Sign Up",
@@ -166,8 +163,7 @@ class _LoginPageState extends State<LoginPage> {
       AuthService authSrv = AuthService();
       User? user = await authSrv.signIn(mail, pass);
       if (user != null) {
-    fetchUserRole(context);
-        
+        fetchUserRole(context);
       } else {
         setState(() {
           errorMessage = "The email or password is incorrect";
@@ -213,26 +209,21 @@ Future<String?> fetchUserRole(BuildContext context) async {
           await _firestore.collection('users').doc(user.uid).get();
 
       if (doc.exists) {
-        if(doc.get('role')=="Student"){
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ProfilePage()),
-        );
-
-        }
-        else if(doc.get('role')=="Admin"){
-             Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => AdminProfilePage()),
-        );
+        if (doc.get('role') == "Student") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage()),
+          );
+        } else if (doc.get('role') == "Admin") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => AdminProfilePage()),
+          );
         }
       }
     }
   } catch (e) {
     print("Error fetching user role: $e");
   }
-  return null; 
+  return null;
 }
-
-
-
