@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 import './Question.dart';
 
 class Quiz {
@@ -10,6 +9,19 @@ class Quiz {
   DateTime? start_date;
   DateTime? end_date;
   List<Question> questions = [];
+
+  getAnswersMap(String studentID) {
+    return {
+      "studentID": studentID,
+      "quizID": id,
+      "studentAnswers":
+          questions.map((question) => question.getSelectedMap()).toList()
+    };
+    // studentID = newStudentID;
+    // quizID = quiz.id;
+    // StudentAnswers =
+    //     quiz.questions.map((question) => question.getSelectedMap()).toList();
+  }
 
   /// Save the Quiz to Firestore
   Future<void> saveToDB() async {
@@ -53,9 +65,11 @@ class Quiz {
     // Retrieve associated questions
     final questionSnapshot =
         await questionCollection.where('quizId', isEqualTo: quizId).get();
-    quiz.questions = questionSnapshot.docs
-        .map((doc) => Question.fromMap(doc.data()))
-        .toList();
+    quiz.questions = questionSnapshot.docs.map((doc) {
+      Question newQuestion = Question.fromMap(doc.data());
+      newQuestion.id = doc.id;
+      return newQuestion;
+    }).toList();
 
     return quiz;
   }

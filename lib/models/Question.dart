@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../components/buildQuiz/MCQWidget.dart';
+import '../components/buildQuiz/TrueFalseWidget.dart';
+import '../components/buildQuiz/WrittenWidget.dart';
 
 class Question {
   String id = '';
@@ -10,6 +13,52 @@ class Question {
   List<String> correct_answer = [];
   double grade = 0;
   bool isRequired = false;
+  bool? tfSelectedAnswer;
+  String? writtenAnswer;
+  int? mcqSelectedAnswer;
+
+  dynamic getSelectedAnswer() {
+    switch (question_type) {
+      case "MCQ":
+        return mcqSelectedAnswer != null
+            ? possible_answers[mcqSelectedAnswer!]
+            : null;
+      case "TF":
+        return tfSelectedAnswer;
+      case "WRITTEN":
+        return correct_answer.isNotEmpty ? correct_answer.first : null;
+      default:
+        return null; // Unsupported question type
+    }
+  }
+
+  Map<String, dynamic> getSelectedMap() {
+    print("qestionid: ${id}");
+    Map<String, dynamic> selectedMap = {
+      "questionID": id,
+      "question_type": question_type,
+      "correct_answer": correct_answer.isNotEmpty ? correct_answer[0] : null,
+      // "grade":
+    };
+
+    switch (question_type) {
+      case "MCQ":
+        selectedMap["selected_answer_mcq"] = mcqSelectedAnswer != null
+            ? possible_answers[mcqSelectedAnswer!]
+            : null;
+        break;
+      case "TF":
+        selectedMap["selected_answer_tf"] = tfSelectedAnswer;
+        break;
+      case "WRITTEN":
+        selectedMap["selected_answer_written"] = writtenAnswer;
+        break;
+      default:
+        selectedMap["selected_answer"] = null; // Handle unsupported types
+    }
+
+    return selectedMap;
+  }
 
   /// Save Question to Firestore
   Future<void> saveToDB(CollectionReference questionCollection) async {
@@ -41,42 +90,38 @@ class Question {
   Widget toWidget() {
     switch (question_type) {
       case "MCQ":
-        return _buildMCQWidget();
+        return MCQWidget(
+          questionText: question_text,
+          possibleAnswers: possible_answers,
+          selectedAnswer: mcqSelectedAnswer,
+          onAnswerSelected: (value) {
+            mcqSelectedAnswer = value;
+          },
+        );
       case "TF":
-        return _buildTrueFalseWidget();
+        return TrueFalseWidget(
+          questionText: question_text,
+          selectedValue: tfSelectedAnswer,
+          onValueSelected: (value) {
+            tfSelectedAnswer = value;
+          },
+        );
       case "WRITTEN":
-        return _buildWrittenWidget();
+        return WrittenWidget(
+          questionText: question_text,
+          initialAnswer: correct_answer.isNotEmpty ? correct_answer.first : '',
+          onAnswerChanged: (value) {
+            correct_answer = [value];
+          },
+        );
       default:
         return Text("Unsupported question type: $question_type");
     }
   }
 
-  /// Build MCQ Widget
-  Widget _buildMCQWidget() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          question_text,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        for (var answer in possible_answers)
-          RadioListTile<String>(
-            title: Text(answer),
-            value: answer,
-            groupValue: correct_answer.isNotEmpty ? correct_answer.first : null,
-            onChanged: (value) {
-              if (value != null) {
-                correct_answer = [value]; // Only one answer allowed for MCQ
-              }
-            },
-          ),
-      ],
-    );
-  }
-
   /// Convert Map to Question
   static Question fromMap(Map<String, dynamic> data) {
+    print(data);
     return Question()
       ..quizId = data['quizId'] ?? ''
       ..question_type = data['question_type'] ?? ''
@@ -97,53 +142,4 @@ class Question {
     {"title": 'True', "value": true},
     {"title": 'False', "value": false},
   ];
-
-  /// Build True/False Widget
-  Widget _buildTrueFalseWidget() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          question_text,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        for (var option in trueFalseValues)
-          RadioListTile<bool>(
-            title: Text(option["title"]),
-            value: option["value"],
-            groupValue: correct_answer.contains("True"),
-            onChanged: (value) {
-              if (value != null) {
-                correct_answer = [value ? "True" : "False"];
-              }
-            },
-          ),
-      ],
-    );
-  }
-
-  /// Build Written Response Widget
-  Widget _buildWrittenWidget() {
-    TextEditingController controller = TextEditingController();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          question_text,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: "Write your answer here",
-            border: OutlineInputBorder(),
-          ),
-          onChanged: (value) {
-            correct_answer = [value]; // Store written response as the answer
-          },
-        ),
-      ],
-    );
-  }
 }

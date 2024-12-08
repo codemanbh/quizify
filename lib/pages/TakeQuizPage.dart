@@ -31,6 +31,8 @@ class _TakeQuizPageState extends State<TakeQuizPage> {
     // print(qid);
 
     quiz = await Quiz.retrieveFromDB('1');
+    // quiz = placeHolderQuizes.quiz1;
+
     // print("asdasdadas" + quiz.title);
 
     setState(() {});
@@ -54,7 +56,11 @@ class _TakeQuizPageState extends State<TakeQuizPage> {
             SizedBox(
               height: 40,
             ),
-            TextButton(onPressed: () {}, child: Text('Submit answer'))
+            TextButton(
+                onPressed: () {
+                  print(quiz.getAnswersMap('1'));
+                },
+                child: Text('Submit answer'))
           ],
         ),
       ),
