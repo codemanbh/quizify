@@ -2,8 +2,6 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:quizify/pages/AllQuizQuestionsPage.dart';
-import 'package:quizify/pages/CreateQuiestionPage.dart';
 import 'package:quizify/pages/ProfilePage.dart';
 import 'package:quizify/pages/SignupPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

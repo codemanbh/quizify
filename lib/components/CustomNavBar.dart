@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../pages/ProfilePage.dart';
-import '../pages/TakeQuizPage.dart';
 
 class CustomNavBar extends StatefulWidget {
   const CustomNavBar({super.key});
@@ -18,8 +16,8 @@ class _CustomNavBarState extends State<CustomNavBar> {
           Navigator.of(context).pushReplacementNamed(pages[index]);
         },
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'account'),
-          BottomNavigationBarItem(icon: Icon(Icons.web), label: 'quizes')
+                    BottomNavigationBarItem(icon: Icon(Icons.web), label: 'quizes'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'account')
         ]);
   }
 }
