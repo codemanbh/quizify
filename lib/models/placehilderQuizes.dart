@@ -20,14 +20,14 @@ class placeHolderQuizes {
           "20-25 years",
           "30+ years"
         ]
-        ..correct_answer = ["10-15 years"]
+        ..correct_answer = "10-15 years"
         ..grade = 5
         ..isRequired = true,
       Question()
         ..id = "2"
         ..question_type = "TF"
         ..question_text = "Cats can purr only when they're happy."
-        ..correct_answer = ["False"]
+        ..correct_answer = 'False'
         ..grade = 3
         ..isRequired = true,
     ];
@@ -45,7 +45,7 @@ class placeHolderQuizes {
         ..question_type = "MCQ"
         ..question_text = "Which breed of cat is known for being hairless?"
         ..possible_answers = ["Sphynx", "Persian", "Maine Coon", "Ragdoll"]
-        ..correct_answer = ["Sphynx"]
+        ..correct_answer = "Sphynx"
         ..grade = 5
         ..isRequired = true,
       Question()

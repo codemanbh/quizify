@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 import './Question.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Quiz {
   String id = "";
@@ -10,6 +10,43 @@ class Quiz {
   DateTime? start_date;
   DateTime? end_date;
   List<Question> questions = [];
+
+  Future<void> submit() async {
+    await saveResultsToDB();
+  }
+
+  Future<void> saveResultsToDB() async {
+    // Get the answers map
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
+
+    final answersMap = getAnswersMap(user!.uid);
+
+    // Reference to the Firestore collection where results will be saved
+    CollectionReference resultsCollection =
+        FirebaseFirestore.instance.collection('quiz_results');
+
+    try {
+      // Add the student results to Firestore
+      await resultsCollection.add(answersMap);
+
+      // Optionally, print or log the success
+      print("Student results saved successfully.");
+    } catch (e) {
+      // Handle any errors that occur during the save
+      print("Error saving student results: $e");
+    }
+  }
+
+  getAnswersMap(String studentID) {
+    return {
+      "studentID": studentID,
+      "quizID": id,
+      "studentAnswers":
+          questions.map((question) => question.getSelectedMap()).toList()
+    };
+  }
 
   /// Save the Quiz to Firestore
   Future<void> saveToDB() async {
@@ -53,9 +90,11 @@ class Quiz {
     // Retrieve associated questions
     final questionSnapshot =
         await questionCollection.where('quizId', isEqualTo: quizId).get();
-    quiz.questions = questionSnapshot.docs
-        .map((doc) => Question.fromMap(doc.data()))
-        .toList();
+    quiz.questions = questionSnapshot.docs.map((doc) {
+      Question newQuestion = Question.fromMap(doc.data());
+      newQuestion.id = doc.id;
+      return newQuestion;
+    }).toList();
 
     return quiz;
   }
