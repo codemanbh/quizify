@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, non_constant_identifier_names
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quizify/pages/AllQuizQuestionsPage.dart';
@@ -5,14 +7,14 @@ import 'package:quizify/pages/CreateQuiestionPage.dart';
 import 'package:quizify/pages/SignupPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class loginPage extends StatefulWidget {
-  loginPage({super.key});
+class LoginPage extends StatefulWidget {
+  LoginPage({super.key});
 
   @override
-  _loginPageState createState() => _loginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _loginPageState extends State<loginPage> {
+class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController EmailCtrl = TextEditingController();
   final TextEditingController passwordCtrl = TextEditingController();
@@ -138,10 +140,7 @@ class _loginPageState extends State<loginPage> {
         const Text("Don't have an account? "),
         TextButton(
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => SignupPage()),
-            );
+            Navigator.of(context).pushReplacementNamed('/signupPage');
           },
           child: const Text(
             "Sign Up",
@@ -164,8 +163,7 @@ class _loginPageState extends State<loginPage> {
       AuthService authSrv = AuthService();
       User? user = await authSrv.signIn(mail, pass);
       if (user != null) {
-    fetchUserRole(context);
-        
+        fetchUserRole(context);
       } else {
         setState(() {
           errorMessage = "The email or password is incorrect";
@@ -213,18 +211,10 @@ Future<String?> fetchUserRole(BuildContext context) async {
           await _firestore.collection('users').doc(user.uid).get();
 
       if (doc.exists) {
-        if(doc.get('role')=="Student"){
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => AllQuizQuestionsPage()),
-        );
-
-        }
-        else if(doc.get('role')=="Admin"){
-             Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => CreateQuiestionPage()),
-        );
+        if (doc.get('role') == "Student") {
+          Navigator.of(context).pushReplacementNamed('/allQuizQuestionsPage');
+        } else if (doc.get('role') == "Admin") {
+          Navigator.of(context).pushReplacementNamed('/createQuiestionPage');
         }
       }
     }
@@ -233,6 +223,3 @@ Future<String?> fetchUserRole(BuildContext context) async {
   }
   return null; // Return null if the role is not found
 }
-
-
-

@@ -5,6 +5,7 @@ import '../../components/TrueFalse.dart';
 import '../../components/MCQ.dart';
 import '../../components/MCQ.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../components/CustomNavBar.dart';
 
 class CreateQuiestionPage extends StatefulWidget {
   const CreateQuiestionPage({super.key});
@@ -27,6 +28,7 @@ class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
       appBar: AppBar(
         title: Text('Add question'),
       ),
+      bottomNavigationBar: CustomNavBar(),
       body: Container(
         padding: EdgeInsets.all(10),
         child: Column(

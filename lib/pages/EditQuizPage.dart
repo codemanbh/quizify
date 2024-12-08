@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../components/CustomNavBar.dart';
+import '../models/Quiz.dart';
 
 class EditQuizPage extends StatefulWidget {
   const EditQuizPage({super.key});
@@ -10,6 +12,11 @@ class EditQuizPage extends StatefulWidget {
 class _EditQuizPageState extends State<EditQuizPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Edit Quiz'),
+      ),
+      bottomNavigationBar: CustomNavBar(),
+    );
   }
 }

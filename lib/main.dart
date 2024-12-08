@@ -20,6 +20,7 @@ import './pages/AllQuizQuestionsPage.dart';
 import './pages/SignupPage.dart';
 import './pages/AllQuizesPage.dart';
 import './pages/loginpage.dart';
+import './pages/TestPage.dart';
 
 void main() async {
   await dotenv.load(); // loud the env variables
@@ -58,7 +59,8 @@ class MyApp extends StatelessWidget {
         '/signupPage': (context) => SignupPage(),
         '/allQuizesPage': (context) => AllQuizesPage(),
         '/profilePage': (context) => ProfilePage(),
-        '/loginPage': (context) => loginPage()
+        '/loginPage': (context) => LoginPage(),
+        // '/testPage': (context) =>
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
