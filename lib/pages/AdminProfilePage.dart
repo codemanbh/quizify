@@ -19,7 +19,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
   String? email = "Loading..."; // Placeholder for the user email
   String? role = "Loading..."; // Placeholder for the user role
 
-  bool isLoading = true; 
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -39,13 +39,13 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
             userName = value.get('name');
             email = value.get('email');
             role = value.get('role');
-            isLoading = false; 
+            isLoading = false;
           });
         }).catchError((e) {
           print("Error fetching user name: $e");
           setState(() {
             userName = "Error fetching name";
-            isLoading = false; 
+            isLoading = false;
           });
         });
       } else {
@@ -68,8 +68,8 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
     return Scaffold(
       bottomNavigationBar: AdminCustom(),
       body: isLoading
-          ? Center(child: CircularProgressIndicator()): 
-          Column(
+          ? Center(child: CircularProgressIndicator())
+          : Column(
               children: [
                 Container(
                   width: double.infinity,
@@ -97,9 +97,10 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                             children: [
                               IconButton(
                                 onPressed: () {},
-                                icon: Icon(Icons.grade_sharp, size: 40, color: Colors.white),
+                                icon: Icon(Icons.grade_sharp,
+                                    size: 40, color: Colors.white),
                               ),
-                              SizedBox(width: 20), 
+                              SizedBox(width: 20),
                               Card(
                                 shape: CircleBorder(),
                                 clipBehavior: Clip.antiAlias,
@@ -113,7 +114,8 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                               SizedBox(width: 20),
                               IconButton(
                                 onPressed: () {},
-                                icon: Icon(Icons.settings, color: Colors.white, size: 40),
+                                icon: Icon(Icons.settings,
+                                    color: Colors.white, size: 40),
                               ),
                             ],
                           ),
@@ -123,35 +125,41 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                   ),
                 ),
                 Text(
-                  "Username: $userName", 
+                  "Username: $userName",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "Email: $email", 
+                  "Email: $email",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "Role: $role", 
+                  "Role: $role",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                  ElevatedButton(onPressed: (){
-            signOut(context);
-          }, 
-          child: Text("SignOut",style: TextStyle(color: Colors.red,fontSize: 20),))
+                ElevatedButton(
+                    onPressed: () {
+                      signOut(context);
+                    },
+                    child: Text(
+                      "SignOut",
+                      style: TextStyle(color: Colors.red, fontSize: 20),
+                    ))
               ],
             ),
     );
   }
 }
+
 Future<void> signOut(BuildContext context) async {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-try {
-await _auth.signOut();
-_auth.authStateChanges();
-Navigator.pushReplacement(context,          
- MaterialPageRoute(builder: (context) => LoginPage()),
-);
-} catch (e) {
-print("Error in signOut: ${e.toString()}");
-}
+  try {
+    await _auth.signOut();
+    _auth.authStateChanges();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  } catch (e) {
+    print("Error in signOut: ${e.toString()}");
+  }
 }
