@@ -7,6 +7,8 @@ import '../../components/MCQ.dart';
 import '../../components/MCQ.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../components/CustomNavBar.dart';
+import '../models/Quiz.dart';
+import '../models/placehilderQuizes.dart';
 
 class CreateQuiestionPage extends StatefulWidget {
   const CreateQuiestionPage({super.key});
@@ -17,23 +19,95 @@ class CreateQuiestionPage extends StatefulWidget {
 
 class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
   String quiestionType = Question.allQuestionTypes[0]['value'];
+  int selectedIndex = 0;
+  int seletedQuestionIndex = 0;
+
+  TextEditingController writtenCorrectAnswerController =
+      TextEditingController();
+
+  late TextEditingController question_text_controller; // Declare the controller
+  late Quiz quiz; // Declare the quiz object
 
   @override
   void initState() {
     super.initState();
+    // Initialize quiz and controller
+    quiz = placeHolderQuizes.quiz1;
+    question_text_controller = TextEditingController(
+      text: quiz.questions[seletedQuestionIndex].question_text,
+    );
+  }
+
+  void saveCurrentEditedQuestion() {
+    quiz.questions[seletedQuestionIndex].question_text =
+        question_text_controller.text;
+    switch (quiz.questions[seletedQuestionIndex].question_type) {
+      case 'TF':
+        break;
+      case 'MCQ':
+        break;
+
+      case 'WRITTEN':
+        quiz.questions[seletedQuestionIndex].correct_answer =
+            writtenCorrectAnswerController.value.text;
+
+        break;
+    }
+
+    setState(() {});
+  }
+
+  void changeCurrentEditedQuestion(int index) {
+    writtenCorrectAnswerController.text =
+        quiz.questions[index].correct_answer ?? "";
+    question_text_controller.text = quiz.questions[index].question_text;
+    seletedQuestionIndex = index; // Update the selected question index
+
+    setState(() {});
+  }
+
+  // void changeQuestionType(String newType){
+  //   quiz.questions[seletedQuestionIndex].question_type = ;
+  // }
+
+  @override
+  void dispose() {
+    question_text_controller.dispose(); // Dispose of the controller
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> getListOfQuestions() {
+      List<Widget> temp = quiz.questions
+          .asMap()
+          .map((index, question) =>
+              MapEntry(index, Container(child: Text((index + 1).toString()))))
+          .values
+          .toList();
+
+      temp.add(Container(child: Icon(Icons.add)));
+
+      return temp;
+    }
+
+    List<Widget> listOfQuestions = getListOfQuestions();
+
     return Scaffold(
       bottomNavigationBar: AdminCustom(),
       appBar: AppBar(
-        title: Text('Add question'),
+        title: Text(quiz.title),
       ),
       body: Container(
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
+            ToggleButtons(
+                children: listOfQuestions,
+                isSelected: listOfQuestions.map<bool>((_) => false).toList(),
+                onPressed: (index) {
+                  changeCurrentEditedQuestion(index);
+                }),
             Text(
               'Quiestion type',
               style: TextStyle(fontSize: 16),
@@ -43,35 +117,47 @@ class _CreateQuiestionPageState extends State<CreateQuiestionPage> {
                   .map((e) => RadioListTile(
                         value: e['value'],
                         title: Text(e['title']),
-                        groupValue: quiestionType,
+                        groupValue:
+                            quiz.questions[seletedQuestionIndex].question_type,
                         onChanged: (v) {
                           if (v != null) {
-                            quiestionType = v;
-                            setState(() {});
+                            setState(() {
+                              quiz.questions[seletedQuestionIndex]
+                                  .question_type = v;
+                            });
                           }
                         },
                       ))
                   .toList(),
             ),
             TextField(
+              controller: question_text_controller,
               decoration: InputDecoration(
                 labelText: 'Write the question',
                 border: OutlineInputBorder(),
               ),
               onChanged: (value) {
-                print('Current text: $value');
+                quiz.questions[seletedQuestionIndex].question_text = value;
               },
             ),
-
             Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: VerticalDivider()),
-
-            'TF' == quiestionType ? TrueFalse() : SizedBox(),
-            'MCQ' == quiestionType ? MCQ() : SizedBox(),
-            'WRITTEN' == quiestionType ? Written() : SizedBox(),
-            ElevatedButton(onPressed: () {}, child: Text('Add the question')),
-            // Text('asdsa')
+            'TF' == quiz.questions[seletedQuestionIndex].question_type
+                ? TrueFalse()
+                : SizedBox(),
+            'MCQ' == quiz.questions[seletedQuestionIndex].question_type
+                ? MCQ()
+                : SizedBox(),
+            'WRITTEN' == quiz.questions[seletedQuestionIndex].question_type
+                ? Written(
+                    controller: writtenCorrectAnswerController,
+                  )
+                : SizedBox(),
+            ElevatedButton(
+                onPressed: saveCurrentEditedQuestion,
+                child: Text('save question')),
+            ElevatedButton(onPressed: () {}, child: Text('finish')),
           ],
         ),
       ),

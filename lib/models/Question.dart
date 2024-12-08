@@ -6,16 +6,23 @@ import '../components/buildQuiz/WrittenWidget.dart';
 
 class Question {
   String id = '';
-  String quizId = ''; // Reference to the Quiz ID
+  String quizId = '';
   String question_type = "";
   String question_text = "";
-  List<String> possible_answers = [];
-  String? correct_answer = null;
-  double grade = 0;
-  bool isRequired = false;
+
+  List<String> possibleMcqAnswers = [];
+
+  double questionGrade = 0;
+  double studentGrade = 0;
+
+  bool? tfCorrectAnswer;
   bool? tfSelectedAnswer;
-  String? writtenAnswer;
-  int? mcqSelectedAnswer;
+
+  String? mcqCorrectAnswer;
+  String? mcqSelectedAnswer;
+
+  String? writtenCorrectAnswer;
+  String? writtenSelectedAnswer;
 
   dynamic getSelectedAnswer() {
     switch (question_type) {
@@ -41,7 +48,9 @@ class Question {
     Map<String, dynamic> selectedMap = {
       "questionID": id,
       "question_type": question_type,
-      "correct_answer": correct_answer,
+      "mcqCorrectAnswer": mcqCorrectAnswer,
+      "writtenCorrectAnswer": writtenCorrectAnswer,
+      "tfCorrectAnswer": tfCorrectAnswer,
     };
 
     // Assign grade based on the selected answer

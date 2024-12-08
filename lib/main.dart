@@ -24,6 +24,7 @@ import './pages/AllQuizesPage.dart';
 import './pages/TestPage.dart';
 import './pages/LoginPage.dart';
 import './pages/EnterQuizIdPage.dart';
+import './pages/CreateQuizPage.dart';
 
 void main() async {
   await dotenv.load(); // loud the env variables
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       initialRoute:
-          '/enterQuizIdPage', // change to what you are currently work on
+          '/createQuizPage', // change to what you are currently work on
       routes: {
         // all the routs (pages) in the app
         '/createQuiestionPage': (context) => CreateQuiestionPage(),
@@ -66,7 +67,8 @@ class MyApp extends StatelessWidget {
         '/loginPage': (context) => LoginPage(),
         '/enterQuizIdPage': (context) => EnterQuizIdPage(),
         // '/testPage': (context) =>
-        '/AdminProfilePage': (context) => AdminProfilePage()
+        '/AdminProfilePage': (context) => AdminProfilePage(),
+        '/createQuizPage': (context) => CreateQuizPage()
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
