@@ -38,7 +38,7 @@ class _EditQuizPageState extends State<EditQuizPage> {
       appBar: AppBar(
         title: Text('Edit Quiz'),
       ),
-      bottomNavigationBar: CustomNavBar(),
+      bottomNavigationBar: CustomNavBar(page_url: '/editQuizPage'),
       body: Column(
         children: [
           Text("edit quiz title"),

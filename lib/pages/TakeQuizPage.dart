@@ -43,7 +43,7 @@ class _TakeQuizPageState extends State<TakeQuizPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: CustomNavBar(),
+      bottomNavigationBar: CustomNavBar(page_url: '/takeQuizPage'),
       appBar: AppBar(
         title: Text(quiz.title), // change later to quiz name
       ),
@@ -93,6 +93,7 @@ class _TakeQuizPageState extends State<TakeQuizPage> {
             TextButton(
                 onPressed: () async {
                   await quiz.submitQuizStudent();
+                  Navigator.of(context).pushNamed('/allStudentAttempts');
                 },
                 child: Text('Submit answer')),
             Text(user?.uid ?? 'no user found')

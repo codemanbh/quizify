@@ -65,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: CustomNavBar(),
+      bottomNavigationBar: CustomNavBar(page_url: '/profilePage'),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : Column(

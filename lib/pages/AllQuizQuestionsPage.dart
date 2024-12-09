@@ -14,7 +14,7 @@ class _AllQuizQuestionsPageState extends State<AllQuizQuestionsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: CustomNavBar(),
+      bottomNavigationBar: CustomNavBar(page_url: '/allQuizQuestionsPage'),
       appBar: AppBar(
         title: Text('Quiz questions'),
       ),

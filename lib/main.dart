@@ -26,6 +26,7 @@ import './pages/LoginPage.dart';
 import './pages/EnterQuizIdPage.dart';
 import './pages/CreateQuizPage.dart';
 import './pages/allTeacherQuizzes.dart';
+import './pages/AllStudentAttempts.dart';
 
 void main() async {
   await dotenv.load(); // loud the env variables
@@ -71,7 +72,8 @@ class MyApp extends StatelessWidget {
         '/AdminProfilePage': (context) => AdminProfilePage(),
         '/createQuizPage': (context) => CreateQuizPage(),
         '/testPage': (context) => TestPage(),
-        '/allTeacherQuizzes': (context) => allTeacherQuizzes()
+        '/allTeacherQuizzes': (context) => allTeacherQuizzes(),
+        '/allStudentAttempts': (context) => AllStudentAttempts()
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

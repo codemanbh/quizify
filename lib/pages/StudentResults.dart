@@ -12,7 +12,7 @@ class _StudentResultsState extends State<StudentResults> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: CustomNavBar(),
-    );
+        // bottomNavigationBar: CustomNavBar(),
+        );
   }
 }

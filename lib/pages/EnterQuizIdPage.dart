@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../components/CustomNavBar.dart';
 import './TakeQuizPage.dart';
 import '../models/Quiz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EnterQuizIdPage extends StatefulWidget {
   const EnterQuizIdPage({super.key});
@@ -15,7 +16,7 @@ class _EnterQuizIdPageState extends State<EnterQuizIdPage> {
   TextEditingController qidCtr = TextEditingController();
   final quizCollection = FirebaseFirestore.instance.collection('quizzes');
   final questionCollection = FirebaseFirestore.instance.collection('questions');
-
+  final attemptCollection = FirebaseFirestore.instance.collection('attempts');
   @override
   Widget build(BuildContext context) {
     takeQuiz() async {
@@ -48,6 +49,30 @@ class _EnterQuizIdPageState extends State<EnterQuizIdPage> {
         return;
       }
 
+      final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      User? user = _auth.currentUser;
+
+      QuerySnapshot attempts = await attemptCollection
+          .where('studentID', isEqualTo: user?.uid)
+          .where('quizID', isEqualTo: quizId)
+          .get();
+
+      if (!attempts.docs.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'You already solved the quiz',
+              style: TextStyle(color: Colors.red),
+            ),
+            backgroundColor: Colors.white,
+          ),
+        );
+
+        Navigator.of(context).pushReplacementNamed('/allStudentAttempts');
+        return;
+      }
+
       Map<String, dynamic> quizData =
           docSnapshot.data() as Map<String, dynamic>;
 
@@ -65,7 +90,7 @@ class _EnterQuizIdPageState extends State<EnterQuizIdPage> {
       appBar: AppBar(
         title: Text('Take Quiz'),
       ),
-      bottomNavigationBar: CustomNavBar(),
+      bottomNavigationBar: CustomNavBar(page_url: '/enterQuizIdPage'),
       body: Container(
         margin: EdgeInsets.all(20),
         child: Center(
