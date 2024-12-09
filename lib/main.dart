@@ -11,7 +11,7 @@ import 'package:quizify/pages/AdminProfilePage.dart';
 import 'package:quizify/pages/ProfilePage.dart';
 
 // pages
-import './pages/CreateQuiestionPage.dart';
+import './pages/CreateQuestionPage.dart';
 import './pages/GradingPage.dart';
 import './pages/ReportPage.dart';
 import './pages/EditQuizPage.dart';
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
           '/createQuizPage', // change to what you are currently work on
       routes: {
         // all the routs (pages) in the app
-        '/createQuiestionPage': (context) => CreateQuiestionPage(),
+        '/createQuiestionPage': (context) => CreateQuestionPage(),
         '/gradingPage': (context) => GradingPage(),
         '/reportPage': (context) => ReportPage(),
         '/takeQuizPage': (context) => TakeQuizPage(),
@@ -68,7 +68,8 @@ class MyApp extends StatelessWidget {
         '/enterQuizIdPage': (context) => EnterQuizIdPage(),
         // '/testPage': (context) =>
         '/AdminProfilePage': (context) => AdminProfilePage(),
-        '/createQuizPage': (context) => CreateQuizPage()
+        '/createQuizPage': (context) => CreateQuizPage(),
+        '/testPage': (context) => TestPage()
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

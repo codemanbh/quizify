@@ -17,21 +17,6 @@ class TrueFalse extends StatefulWidget {
 }
 
 class _TrueFalseState extends State<TrueFalse> {
-  late bool selectedAnswer;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedAnswer = widget.selectedAnswer; // Initialize from parent
-  }
-
-  void updateAnswer(bool value) {
-    setState(() {
-      selectedAnswer = value;
-    });
-    widget.onAnswerChanged(value); // Notify parent of the change
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -39,10 +24,11 @@ class _TrueFalseState extends State<TrueFalse> {
           .map((e) => RadioListTile<bool>(
                 value: e['value'],
                 title: Text(e['title']),
-                groupValue: selectedAnswer,
+                groupValue: widget.selectedAnswer,
                 onChanged: (value) {
                   if (value != null) {
-                    updateAnswer(value);
+                    widget
+                        .onAnswerChanged(value); // Notify parent of the change
                   }
                 },
               ))

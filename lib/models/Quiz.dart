@@ -1,10 +1,13 @@
+import './Question.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import './Question.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Quiz {
-  String id = "";
+  String quizID = "";
+  String teacherID = "";
+  String studentID = "";
+  String quizMode = "creation";
   String title = "";
   String description = "";
   DateTime? start_date;
@@ -14,6 +17,8 @@ class Quiz {
   Future<void> submit() async {
     await saveResultsToDB();
   }
+
+  static List<String> quizModes = ['creation', 'attempt'];
 
   Future<void> saveResultsToDB() async {
     // Get the answers map
@@ -42,63 +47,63 @@ class Quiz {
   getAnswersMap(String studentID) {
     return {
       "studentID": studentID,
-      "quizID": id,
+      "quizID": quizID,
       "studentAnswers":
           questions.map((question) => question.questionToMap()).toList()
     };
   }
 
   /// Save the Quiz to Firestore
-  Future<void> saveToDB() async {
-    final quizCollection = FirebaseFirestore.instance.collection('quizzes');
-    final questionCollection =
-        FirebaseFirestore.instance.collection('questions');
+  // Future<void> saveToDB() async {
+  //   final quizCollection = FirebaseFirestore.instance.collection('quizzes');
+  //   final questionCollection =
+  //       FirebaseFirestore.instance.collection('questions');
 
-    // Save quiz
-    final docRef = id.isEmpty
-        ? await quizCollection.add(quizToMap())
-        : quizCollection.doc(id);
-    if (id.isEmpty) {
-      id = docRef.id; // Assign generated Firestore ID
-    } else {
-      await docRef.set(quizToMap());
-    }
+  //   // Save quiz
+  //   final docRef = quizID.isEmpty
+  //       ? await quizCollection.add(quizToMap())
+  //       : quizCollection.doc(quizID);
+  //   if (quizID.isEmpty) {
+  //     quizID = docRef.id; // Assign generated Firestore ID
+  //   } else {
+  //     await docRef.set(quizToMap());
+  //   }
 
-    // Save associated questions
-    for (var question in questions) {
-      question.quizId = id; // Ensure question has the quiz ID
-      await question.saveToDB(questionCollection);
-    }
-  }
+  //   // Save associated questions
+  //   for (var question in questions) {
+  //     question.quizId = quizID; // Ensure question has the quiz ID
+  //     await question.saveToDB(questionCollection);
+  //   }
+  // }
 
   /// Retrieve Quiz and its Questions from Firestore
-  static Future<Quiz> retrieveFromDB(String quizId) async {
-    final quizCollection = FirebaseFirestore.instance.collection('quizzes');
-    final questionCollection =
-        FirebaseFirestore.instance.collection('questions');
+  // static Future<Quiz> retrieveFromDB(String quizId) async {
+  //   final quizCollection = FirebaseFirestore.instance.collection('quizzes');
+  //   final questionCollection =
+  //       FirebaseFirestore.instance.collection('questions');
 
-    // Retrieve quiz
-    final quizSnapshot = await quizCollection.doc(quizId).get();
-    if (!quizSnapshot.exists) {
-      throw Exception("Quiz with ID $quizId not found.");
-    }
+  //   // Retrieve quiz
+  //   final quizSnapshot = await quizCollection.doc(quizId).get();
+  //   if (!quizSnapshot.exists) {
+  //     throw Exception("Quiz with ID $quizId not found.");
+  //   }
 
-    final quizData = quizSnapshot.data()!;
-    Quiz quiz = Quiz.fromMap(quizData);
-    quiz.id = quizId;
+  //   final quizData = quizSnapshot.data()!;
+  //   Quiz quiz = Quiz.fromMap(quizData);
+  //   quiz.quizID = quizId;
 
-    // Retrieve associated questions
-    final questionSnapshot =
-        await questionCollection.where('quizId', isEqualTo: quizId).get();
-    quiz.questions = questionSnapshot.docs.map((doc) {
-      Question newQuestion = Question();
-      newQuestion.fromMap(doc.data());
+  //   // Retrieve associated questions
+  //   final questionSnapshot =
+  //       await questionCollection.where('quizId', isEqualTo: quizId).get();
+  //   quiz.questions = questionSnapshot.docs.map((doc) {
+  //     Question newQuestion = Question();
+  //     newQuestion.fromMap(doc.data());
 
-      return newQuestion;
-    }).toList();
+  //     return newQuestion;
+  //   }).toList();
 
-    return quiz;
-  }
+  //   return quiz;
+  // }
 
   /// Convert Quiz to Map
   Map<String, dynamic> quizToMap() {

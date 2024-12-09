@@ -59,7 +59,7 @@ class _TakeQuizPageState extends State<TakeQuizPage> {
           children: [
             Column(
                 children: quiz.questions
-                    .map((question) => question.toWidget())
+                    .map((question) => question.questionToWidget())
                     .toList()),
             SizedBox(
               height: 40,

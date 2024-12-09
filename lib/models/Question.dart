@@ -14,130 +14,10 @@ class Question {
   List<String> possibleMcqAnswers = [];
 
   double questionGrade = 0;
-  double studentGrade = 0;
+  double? studentGrade;
 
-  bool? tfCorrectAnswer;
-  bool? tfSelectedAnswer;
-
-  String? mcqCorrectAnswer;
-  String? mcqSelectedAnswer;
-
-  String? writtenCorrectAnswer;
-  String? writtenSelectedAnswer;
-
-  /// Convert Question to Map
-  Map<String, dynamic> questionToMap() {
-    return {
-      "questionID": questionID,
-      "quizId": quizId,
-      "question_type": question_type,
-      "question_text": question_text,
-      // mcq
-      "possibleMcqAnswers": possibleMcqAnswers,
-      "mcqCorrectAnswer": mcqCorrectAnswer,
-      "mcqSelectedAnswer": mcqSelectedAnswer,
-      // tf
-      "tfCorrectAnswer": tfCorrectAnswer,
-      "tfSelectedAnswer": tfSelectedAnswer,
-      // wriiten
-      "writtenCorrectAnswer": writtenCorrectAnswer,
-      "writtenSelectedAnswer": writtenSelectedAnswer
-    };
-  }
-
-  /// Convert Map to Question
-  fromMap(Map<String, dynamic> data) {
-    questionID = data['questionID'] ?? '';
-    quizId = data['quizId'] ?? '';
-    question_type = data['question_type'] ?? '';
-    question_text = data['question_text'] ?? '';
-    // MCQ
-    possibleMcqAnswers = List<String>.from(data['possibleMcqAnswers'] ?? []);
-    mcqCorrectAnswer = data['mcqCorrectAnswer'];
-    mcqSelectedAnswer = data['mcqSelectedAnswer'];
-    // True/False
-    tfCorrectAnswer = data['tfCorrectAnswer'];
-    tfSelectedAnswer = data['tfSelectedAnswer'];
-    // Written
-    writtenCorrectAnswer = data['writtenCorrectAnswer'];
-    writtenSelectedAnswer = data['writtenSelectedAnswer'];
-  }
-
-  gradeQuestionAnswer() {
-    switch (question_type) {
-      case "MCQ":
-        if (mcqSelectedAnswer != null &&
-            mcqCorrectAnswer != null &&
-            mcqSelectedAnswer == mcqCorrectAnswer) {
-          studentGrade = questionGrade;
-        } else {
-          studentGrade = 0;
-        }
-        break;
-      case "TF":
-        if (tfSelectedAnswer != null &&
-            tfCorrectAnswer != null &&
-            tfSelectedAnswer == tfCorrectAnswer) {
-          studentGrade = questionGrade;
-        } else {
-          studentGrade = 0;
-        }
-
-      case "WRITTEN":
-        studentGrade = 0;
-        break;
-    }
-  }
-
-  bool equalsIgnoreCase(String? string1, String? string2) {
-    return string1?.toLowerCase() == string2?.toLowerCase();
-  }
-
-  /// Save Question to Firestore
-  Future<void> saveToDB(CollectionReference questionCollection) async {
-    final docRef = questionID.isEmpty
-        ? await questionCollection.add(questionToMap())
-        : questionCollection.doc(questionID);
-
-    if (questionID.isEmpty) {
-      questionID = docRef.id; // Assign generated Firestore ID
-    } else {
-      await docRef.set(questionToMap());
-    }
-  }
-
-  /// Convert Question to a Solvable Widget
-  Widget toWidget() {
-    switch (question_type) {
-      case "MCQ":
-        return MCQWidget(
-          questionText: question_text,
-          possibleAnswers: possibleMcqAnswers,
-          selectedAnswer: mcqSelectedAnswer ?? '',
-          onAnswerSelected: (value) {
-            mcqSelectedAnswer = value;
-          },
-        );
-      case "TF":
-        return TrueFalseWidget(
-          questionText: question_text,
-          selectedValue: tfSelectedAnswer,
-          onValueSelected: (value) {
-            tfSelectedAnswer = value;
-          },
-        );
-      case "WRITTEN":
-        return WrittenWidget(
-          questionText: question_text,
-          initialAnswer: writtenCorrectAnswer,
-          onAnswerChanged: (value) {
-            writtenCorrectAnswer = value;
-          },
-        );
-      default:
-        return Text("Unsupported question type: $question_type");
-    }
-  }
+  String? teacherCorrectAnswer;
+  String? studentSelectedAnswer;
 
   static List<Map<dynamic, dynamic>> allQuestionTypes = [
     {"title": 'True/False', "value": "TF"},
@@ -146,7 +26,76 @@ class Question {
   ];
 
   static List<Map<dynamic, dynamic>> trueFalseValues = [
-    {"title": 'True', "value": true},
-    {"title": 'False', "value": false},
+    {"title": 'True', "value": 'true'},
+    {"title": 'False', "value": 'false'},
   ];
+
+  /// Convert Question to Map
+  Map<String, dynamic> questionToMap() {
+    return {
+      "questionID": questionID,
+      "quizId": quizId,
+      "question_type": question_type,
+      "question_text": question_text,
+      "teacherCorrectAnswer": teacherCorrectAnswer,
+      "studentSelectedAnswer": studentSelectedAnswer,
+    };
+  }
+
+  /// Convert Map to Question
+  questionFromMap(Map<String, dynamic> data) {
+    questionID = data['questionID'] ?? '';
+    quizId = data['quizId'] ?? '';
+    question_type = data['question_type'] ?? '';
+    question_text = data['question_text'] ?? '';
+    possibleMcqAnswers = List<String>.from(data['possibleMcqAnswers'] ?? []);
+    teacherCorrectAnswer = data['teacherCorrectAnswer'];
+    studentSelectedAnswer = data['studentSelectedAnswer'];
+  }
+
+  gradeQuestionAnswer() {
+    if (question_type != 'WRITTEN') {
+      if (teacherCorrectAnswer != null &&
+          teacherCorrectAnswer == studentSelectedAnswer) {
+        studentGrade = questionGrade;
+      } else {
+        studentGrade = 0;
+      }
+    } else {
+      studentGrade = null;
+    }
+  }
+
+  /// Convert Question to a Solvable Widget
+  Widget questionToWidget() {
+    switch (question_type) {
+      case "MCQ":
+        return MCQWidget(
+          questionText: question_text,
+          possibleAnswers: possibleMcqAnswers,
+          selectedAnswer: studentSelectedAnswer ?? '',
+          onAnswerSelected: (value) {
+            studentSelectedAnswer = value;
+          },
+        );
+      case "TF":
+        return TrueFalseWidget(
+          questionText: question_text,
+          selectedValue: teacherCorrectAnswer,
+          onValueSelected: (value) {
+            teacherCorrectAnswer = value;
+          },
+        );
+      case "WRITTEN":
+        return WrittenWidget(
+          questionText: question_text,
+          initialAnswer: teacherCorrectAnswer,
+          onAnswerChanged: (value) {
+            teacherCorrectAnswer = value;
+          },
+        );
+      default:
+        return Text("Unsupported question type: $question_type");
+    }
+  }
 }
