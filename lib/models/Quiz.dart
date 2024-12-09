@@ -22,6 +22,11 @@ class Quiz {
     qdm.addQuiz(this);
   }
 
+  Future<void> deleteQuiz() async {
+    QuizDatabaseManager qdm = QuizDatabaseManager();
+    qdm.deleteQuiz(this);
+  }
+
   void gradeAnswers() {
     quizMode = 'attempt';
 
@@ -48,21 +53,25 @@ class Quiz {
 
   // Create Quiz from Map
   static Quiz quizFromMap(Map<String, dynamic> map) {
-    return Quiz()
-      ..quizID = map['quizID'] ?? ""
-      ..teacherID = map['teacherID'] ?? ""
-      ..studentID = map['studentID'] ?? ""
-      ..quizMode = map['quizMode'] ?? "creation"
-      ..title = map['title'] ?? ""
-      ..description = map['description'] ?? ""
-      ..start_date =
-          map['start_date'] != null ? DateTime.parse(map['start_date']) : null
-      ..end_date =
-          map['end_date'] != null ? DateTime.parse(map['end_date']) : null
-      ..questions = (map['questions'] as List<dynamic>)
-          .map((questionMap) => Question.questionFromMap(questionMap))
-          .toList()
-          .cast<Question>();
+    try {
+      return Quiz()
+        ..quizID = map['quizID'] ?? ""
+        ..teacherID = map['teacherID'] ?? ""
+        ..studentID = map['studentID'] ?? ""
+        ..quizMode = map['quizMode'] ?? "creation"
+        ..title = map['title'] ?? ""
+        ..description = map['description'] ?? ""
+        ..start_date =
+            map['start_date'] != null ? DateTime.parse(map['start_date']) : null
+        ..end_date =
+            map['end_date'] != null ? DateTime.parse(map['end_date']) : null
+        ..questions = (map['questions'] as List<dynamic>)
+            .map((questionMap) => Question.questionFromMap(questionMap))
+            .toList()
+            .cast<Question>();
+    } catch (e) {
+      return Quiz();
+    }
   }
 }
 

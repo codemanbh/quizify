@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quizify/components/AdminCustom.dart';
+import 'package:quizify/components/AdminCustomNavBar.dart';
 import 'package:quizify/components/Written.dart';
 import '../../models/Question.dart';
 import '../../components/TrueFalse.dart';
@@ -56,6 +56,8 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
   }
 
   void saveCurrentEditedQuestion() {
+    quiz.questions[selectedQuestionIndex].question_text =
+        questionTextController.text;
     if (quiz.questions[selectedQuestionIndex].question_type == 'WRITTEN') {
       quiz.questions[selectedQuestionIndex].teacherCorrectAnswer =
           teacherCorrectAnswerController.text;
@@ -132,7 +134,7 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
     }
     firstTime = false;
     return Scaffold(
-      bottomNavigationBar: AdminCustom(),
+      bottomNavigationBar: AdminCustomNavBar(),
       appBar: AppBar(
         title: Text(quiz.title),
       ),

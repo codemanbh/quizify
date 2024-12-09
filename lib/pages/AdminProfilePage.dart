@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quizify/pages/LoginPage.dart';
-import '../components/AdminCustom.dart';
+import '../components/AdminCustomNavBar.dart';
 
 class AdminProfilePage extends StatefulWidget {
   const AdminProfilePage({super.key});
@@ -66,7 +66,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: AdminCustom(),
+      bottomNavigationBar: AdminCustomNavBar(),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : Column(

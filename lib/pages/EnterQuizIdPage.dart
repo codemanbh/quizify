@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../components/CustomNavBar.dart';
+import './TakeQuizPage.dart';
 
 class EnterQuizIdPage extends StatefulWidget {
   const EnterQuizIdPage({super.key});
@@ -46,8 +47,11 @@ class _EnterQuizIdPageState extends State<EnterQuizIdPage> {
         return;
       }
 
-      Map<String, dynamic> quizData = docSnapshot.data() as Map<String, dynamic>;
-      Navigator.of(context).pushNamed('/takeQuizPage', arguments: {'qid': quizId, 'data': quizData});
+      Map<String, dynamic> quizData =
+          docSnapshot.data() as Map<String, dynamic>;
+      Navigator.of(context).pushNamed('/takeQuizPage',
+          arguments: {'qid': quizId, 'data': quizData});
+      Navigator.of(context).pushNamed((context) => TakeQuizPage());
     }
 
     return Scaffold(
