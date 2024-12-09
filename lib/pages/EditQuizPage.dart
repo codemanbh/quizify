@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../components/CustomNavBar.dart';
 import '../models/Quiz.dart';
@@ -14,13 +15,25 @@ class EditQuizPage extends StatefulWidget {
 
 class _EditQuizPageState extends State<EditQuizPage> {
   @override
-  TextEditingController newname = TextEditingController();
-  TextEditingController newdescription = TextEditingController();
-  TextEditingController newstartdate = TextEditingController();
-  TextEditingController newstartdatestring = TextEditingController();
-  TextEditingController newenddate = TextEditingController();
-  TextEditingController newenddatestring = TextEditingController();
+  TextEditingController newnamecontroller = TextEditingController();
+  TextEditingController newdescriptioncontroller = TextEditingController();
+  TextEditingController newstartdatecontroller = TextEditingController();
+  TextEditingController newstartdatestringcontroller = TextEditingController();
+  TextEditingController newenddatecontroller = TextEditingController();
+  TextEditingController newenddatestringcontroller = TextEditingController();
+
   Widget build(BuildContext context) {
+    DocumentReference docRef =
+        FirebaseFirestore.instance.collection("quizzes").doc("1");
+
+    docRef.get().then((value) {
+      // get the previouse values and put them in the controlllers
+      this.newnamecontroller = value.get('title') ?? '';
+      this.newdescriptioncontroller = value.get('description') ?? '';
+      this.newstartdatecontroller = value.get('start_date') ?? '';
+      this.newenddatecontroller = value.get('end_date') ?? '';
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Quiz'),
@@ -30,17 +43,17 @@ class _EditQuizPageState extends State<EditQuizPage> {
         children: [
           Text("edit quiz title"),
           TextField(
-            controller: newname,
+            controller: newnamecontroller,
             decoration: InputDecoration(border: OutlineInputBorder()),
           ),
           Text("edit quiz description"),
           TextField(
-            controller: newdescription,
+            controller: newdescriptioncontroller,
             decoration: InputDecoration(border: OutlineInputBorder()),
           ),
           Text("edit quiz start date"),
           TextField(
-            controller: newstartdate,
+            controller: newstartdatecontroller,
             readOnly: true, // Prevent manual input
             onTap: () {
               // Trigger DatePicker on tap
@@ -51,21 +64,40 @@ class _EditQuizPageState extends State<EditQuizPage> {
                 lastDate: DateTime(2030),
               ).then((selectedDate) {
                 if (selectedDate != null) {
-                  // Update both controllers with the selected date
-                  newstartdate.text = selectedDate.toString(); // For display
-                  newstartdatestring.text =
-                      selectedDate.toIso8601String(); // Or another format
+                  // Trigger TimePicker after selecting a date
+                  showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                  ).then((selectedTime) {
+                    if (selectedTime != null) {
+                      // Combine selected date and time
+                      final DateTime finalDateTime = DateTime(
+                        selectedDate.year,
+                        selectedDate.month,
+                        selectedDate.day,
+                        selectedTime.hour,
+                        selectedTime.minute,
+                      );
+
+                      // Update controllers with the selected date and time
+                      newstartdatecontroller.text =
+                          finalDateTime.toString(); // For display
+                      newstartdatestringcontroller.text =
+                          finalDateTime.toIso8601String(); // Or another format
+                    }
+                  });
                 }
               });
             },
-            decoration: InputDecoration(
-              hintText: 'Select a start date',
+            decoration: const InputDecoration(
+              hintText: 'Select a start date and time',
             ),
           ),
           TextField(
-            controller: newenddate,
+            controller: newstartdatecontroller,
             readOnly: true, // Prevent manual input
             onTap: () {
+              // Trigger DatePicker on tap
               showDatePicker(
                 context: context,
                 initialDate: DateTime.now(),
@@ -73,17 +105,47 @@ class _EditQuizPageState extends State<EditQuizPage> {
                 lastDate: DateTime(2030),
               ).then((selectedDate) {
                 if (selectedDate != null) {
-                  // Update both controllers with the selected date
-                  newenddate.text = selectedDate.toString(); // For display
-                  newenddatestring.text =
-                      selectedDate.toIso8601String(); // Or another format
+                  // Trigger TimePicker after selecting a date
+                  showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                  ).then((selectedTime) {
+                    if (selectedTime != null) {
+                      // Combine selected date and time
+                      final DateTime finalDateTime = DateTime(
+                        selectedDate.year,
+                        selectedDate.month,
+                        selectedDate.day,
+                        selectedTime.hour,
+                        selectedTime.minute,
+                      );
+
+                      // Update controllers with the selected date and time
+                      newenddatecontroller.text =
+                          finalDateTime.toString(); // For display
+                      newenddatestringcontroller.text =
+                          finalDateTime.toIso8601String(); // Or another format
+                    }
+                  });
                 }
               });
             },
-            decoration: InputDecoration(
-              hintText: 'Select a start date',
+            decoration: const InputDecoration(
+              hintText: 'Select a start date and time',
             ),
           ),
+          FloatingActionButton(onPressed: () {
+            DocumentReference docRef = FirebaseFirestore.instance
+                .collection("quizzes")
+                .doc("1"); //hard coded quiz id
+
+            Map<String, dynamic> Item = {
+              "title": newnamecontroller,
+              "description": newdescriptioncontroller,
+              "end_date": newstartdatestringcontroller,
+              "start_date": newenddatestringcontroller
+            };
+          })
         ],
       ),
     );
