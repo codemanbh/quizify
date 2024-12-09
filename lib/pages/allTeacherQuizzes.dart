@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quizify/models/Quiz.dart';
+import 'package:quizify/pages/GradeStudentAnswer.dart';
 import './CreateQuestionPage.dart';
 
 class allTeacherQuizzes extends StatefulWidget {
@@ -55,7 +56,9 @@ class _allTeacherQuizzesState extends State<allTeacherQuizzes> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('All Quizzes')),
-      bottomNavigationBar: AdminCustomNavBar(),
+      bottomNavigationBar: AdminCustomNavBar(
+        page_url: '/allTeacherQuizzes',
+      ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : Container(
@@ -72,17 +75,36 @@ class _allTeacherQuizzesState extends State<allTeacherQuizzes> {
                       },
                       icon: Icon(Icons.delete)),
                   subtitle: Text("ID: ${quizzes[index].quizID}"),
-                  trailing: IconButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                CreateQuestionPage(quiz: quizzes[index]),
-                          ),
-                        );
-                      },
-                      icon: Icon(Icons.edit)),
+                  trailing: SizedBox(
+                    width: 80,
+                    child: Row(
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => GradeStudentAnswer(
+                                    quizID: quiz?.quizID ?? '',
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: Icon(Icons.person)),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      CreateQuestionPage(quiz: quizzes[index]),
+                                ),
+                              );
+                            },
+                            icon: Icon(Icons.edit)),
+                      ],
+                    ),
+                  ),
                 )),
               ),
             ),

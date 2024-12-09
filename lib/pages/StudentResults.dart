@@ -6,7 +6,8 @@ import 'package:quizify/models/Quiz.dart';
 import '../components/CustomNavBar.dart';
 
 class StudentResults extends StatefulWidget {
-  const StudentResults({super.key});
+  final String attemptID;
+  StudentResults({Key? key, required this.attemptID}) : super(key: key);
 
   @override
   State<StudentResults> createState() => _StudentResultsState();
@@ -14,20 +15,22 @@ class StudentResults extends StatefulWidget {
 
 class _StudentResultsState extends State<StudentResults> {
   Quiz? fetchedQuiz;
+  String attemptID = '';
 
   @override
   void initState() {
     super.initState();
+    attemptID = widget.attemptID ?? '';
     fetchQuiz(); // Call fetchQuiz in initState to load the data when the widget is created
   }
 
   void fetchQuiz() async {
     QuizDatabaseManager quizManager = QuizDatabaseManager();
-    String quizID = "8B04DHbPBtcldRKnY85M";
+    // String attemptID = "8B04DHbPBtcldRKnY85M";
 
     try {
       // Fetch the quiz (await the result since getQuiz is asynchronous)
-      Quiz? quiz = await quizManager.getAttempt(quizID);
+      Quiz? quiz = await quizManager.getAttempt(attemptID);
 
       setState(() {
         fetchedQuiz = quiz; // Update the fetchedQuiz state
@@ -41,7 +44,7 @@ class _StudentResultsState extends State<StudentResults> {
         print("Number of Questions: ${quiz.questions.length}");
         print("Question Count: ${quiz.questions.length}");
       } else {
-        print("Quiz with ID $quizID does not exist.");
+        print("Quiz with ID $attemptID does not exist.");
       }
     } catch (e) {
       print("An error occurred while fetching the quiz: $e");

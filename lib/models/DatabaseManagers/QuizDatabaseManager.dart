@@ -23,12 +23,21 @@ class QuizDatabaseManager {
       if (quiz.quizID == null || quiz.quizID == '') {
         docRef = await quizzesCollection.doc();
         quiz.quizID = docRef.id;
+        print('savvvvvvvvvvvvvvvvvvved');
+
+        print(docRef.id);
+
         quizMap = quiz.quizToMap();
         docRef.set(quizMap);
       } else {
         docRef = await quizzesCollection.doc(quiz.quizID);
+        print('savvvvvvvvvvvvvvvvvvved');
+
+        print(docRef.id);
+
         await docRef.set(quizMap);
       }
+
       // Add the quiz to Firestore, letting Firestore generate the document ID
 
       // print("Quiz added successfully with ID: ${docRef.id}");

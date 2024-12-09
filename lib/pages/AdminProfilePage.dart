@@ -15,19 +15,18 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  String? userName = "Loading..."; // Placeholder for the user name
-  String? email = "Loading..."; // Placeholder for the user email
-  String? role = "Loading..."; // Placeholder for the user role
-
+  String? userName = "Loading...";
+  String? email = "Loading...";
+  String? role = "Loading...";
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    FetchAdminName(); // Fetch the user's name when the widget initializes
+    FetchName();
   }
 
-  Future<void> FetchAdminName() async {
+  Future<void> FetchName() async {
     try {
       User? user = _auth.currentUser;
 
@@ -66,7 +65,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: AdminCustomNavBar(),
+      bottomNavigationBar: AdminCustomNavBar(page_url: '/adminProfilePage'),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : Column(
@@ -105,7 +104,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                                 shape: CircleBorder(),
                                 clipBehavior: Clip.antiAlias,
                                 child: Image.asset(
-                                  'assets/diddy.jpg',
+                                  'assets/anynmous.jpg',
                                   fit: BoxFit.cover,
                                   width: 175,
                                   height: 175,
@@ -129,7 +128,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "Email: $email",
+                  "email: $email",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 Text(

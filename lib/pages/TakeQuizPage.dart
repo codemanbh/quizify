@@ -8,6 +8,7 @@ import '../components/buildQuiz/MCQWidget.dart';
 import '../components/buildQuiz/TrueFalseWidget.dart';
 import '../components/buildQuiz/WrittenWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../components/CountdownTimer.dart';
 
 class TakeQuizPage extends StatefulWidget {
   final Quiz quiz;
@@ -38,6 +39,15 @@ class _TakeQuizPageState extends State<TakeQuizPage> {
     // final answersMap = getAnswersMap(user!.uid);
     setState(() {});
   }
+
+  void submitAnswer() async {
+    await quiz.submitQuizStudent();
+    Navigator.of(context).pushReplacementNamed('/allStudentAttempts');
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Time has finished!')),
+    );
+  }
   // int questionIndex = 0;
 
   @override
@@ -51,6 +61,16 @@ class _TakeQuizPageState extends State<TakeQuizPage> {
         margin: EdgeInsets.all(10),
         child: Column(
           children: [
+            CountdownTimer(
+              startTime: quiz.start_date ?? DateTime.now(),
+              endTime:
+                  quiz.end_date ?? DateTime.now(), // Example target end time
+              onFinish: () {
+                // Action to perform when the timer finishes
+                submitAnswer();
+                print("The countdown has finished!");
+              },
+            ),
             Column(
                 children: quiz.questions.asMap().entries.map((entry) {
               final index = entry.key;
@@ -90,12 +110,7 @@ class _TakeQuizPageState extends State<TakeQuizPage> {
             SizedBox(
               height: 40,
             ),
-            TextButton(
-                onPressed: () async {
-                  await quiz.submitQuizStudent();
-                  Navigator.of(context).pushNamed('/allStudentAttempts');
-                },
-                child: Text('Submit answer')),
+            TextButton(onPressed: submitAnswer, child: Text('Submit answer')),
             Text(user?.uid ?? 'no user found')
           ],
         ),

@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       initialRoute:
-          '/studentResults', // change to what you are currently work on
+          '/allStudentAttempts', // change to what you are currently work on
       // change to what you are currently work on
       routes: {
         // all the routs (pages) in the app
@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
         // '/takeQuizPage': (context) => TakeQuizPage(),
         '/editQuizPage': (context) => EditQuizPage(),
         '/quizManagementPage': (context) => QuizManagementPage(),
-        '/studentResults': (context) => StudentResults(),
+        // '/studentResults': (context) => StudentResults(),
         '/allQuizQuestionsPage': (context) => AllQuizQuestionsPage(),
         '/signupPage': (context) => SignupPage(),
         '/allQuizesPage': (context) => AllQuizesPage(),
@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
         '/loginPage': (context) => LoginPage(),
         '/enterQuizIdPage': (context) => EnterQuizIdPage(),
         // '/testPage': (context) =>
-        '/AdminProfilePage': (context) => AdminProfilePage(),
+        '/adminProfilePage': (context) => AdminProfilePage(),
         '/createQuizPage': (context) => CreateQuizPage(),
         '/testPage': (context) => TestPage(),
         '/allTeacherQuizzes': (context) => allTeacherQuizzes(),

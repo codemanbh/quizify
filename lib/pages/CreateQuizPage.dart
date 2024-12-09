@@ -189,7 +189,9 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
       appBar: AppBar(
         title: Text('Create Quiz'),
       ),
-      bottomNavigationBar: AdminCustomNavBar(),
+      bottomNavigationBar: AdminCustomNavBar(
+        page_url: '/createQuizPage',
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

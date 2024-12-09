@@ -135,7 +135,9 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
     }
     firstTime = false;
     return Scaffold(
-      bottomNavigationBar: AdminCustomNavBar(),
+      bottomNavigationBar: AdminCustomNavBar(
+        page_url: '/createQuestionPage',
+      ),
       appBar: AppBar(
         title: Text(quiz.title),
       ),
@@ -225,6 +227,7 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
               ElevatedButton(
                 onPressed: () {
                   saveCurrentEditedQuestion();
+                  print('saved');
                   // Add logic to finalize the quiz creation
 
                   quiz.submitQuizTeacher();
