@@ -23,8 +23,9 @@ class _EditQuizPageState extends State<EditQuizPage> {
   TextEditingController newenddatestringcontroller = TextEditingController();
 
   Widget build(BuildContext context) {
-    DocumentReference docRef =
-        FirebaseFirestore.instance.collection("quizzes").doc("1");
+    DocumentReference docRef = FirebaseFirestore.instance
+        .collection("quizzes")
+        .doc("9AL69xXRu3Vr2bbu9O6s");
 
     docRef.get().then((value) {
       // get the previouse values and put them in the controlllers
@@ -135,16 +136,21 @@ class _EditQuizPageState extends State<EditQuizPage> {
             ),
           ),
           FloatingActionButton(onPressed: () {
+            print(newnamecontroller.text);
             DocumentReference docRef = FirebaseFirestore.instance
                 .collection("quizzes")
-                .doc("1"); //hard coded quiz id
+                .doc("9AL69xXRu3Vr2bbu9O6s"); //hard coded quiz id
 
             Map<String, dynamic> Item = {
-              "title": newnamecontroller,
-              "description": newdescriptioncontroller,
-              "end_date": newstartdatestringcontroller,
-              "start_date": newenddatestringcontroller
+              "title": newnamecontroller.text,
+              "description": newdescriptioncontroller.text,
+              "end_date": newstartdatestringcontroller.text,
+              "start_date": newenddatestringcontroller.text
             };
+
+            docRef.set(Item).whenComplete(() {
+              print("updated!");
+            });
           })
         ],
       ),
