@@ -2,6 +2,7 @@ import './Question.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import './DatabaseManagers/QuizDatabaseManager.dart';
 
 class Quiz {
   String quizID = "";
@@ -14,45 +15,63 @@ class Quiz {
   DateTime? end_date;
   List<Question> questions = [];
 
-  Future<void> submit() async {
-    await saveResultsToDB();
-  }
-
   static List<String> quizModes = ['creation', 'attempt'];
 
-  Future<void> saveResultsToDB() async {
-    // Get the answers map
-    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+  void saveQuizToDB() {
+    QuizDatabaseManager qdm = QuizDatabaseManager();
+    qdm.addQuiz(this);
+  }
 
-    final answersMap = getAnswersMap(user!.uid);
+  void gradeAnswers() {
+    quizMode = 'attempt';
 
-    // Reference to the Firestore collection where results will be saved
-    CollectionReference resultsCollection =
-        FirebaseFirestore.instance.collection('quiz_results');
-
-    try {
-      // Add the student results to Firestore
-      await resultsCollection.add(answersMap);
-
-      // Optionally, print or log the success
-      print("Student results saved successfully.");
-    } catch (e) {
-      // Handle any errors that occur during the save
-      print("Error saving student results: $e");
+    for (int i = 0; i < questions.length; i++) {
+      questions[i].gradeQuestionAnswer();
     }
   }
 
-  getAnswersMap(String studentID) {
+  // Convert Quiz to Map
+  Map<String, dynamic> quizToMap() {
     return {
-      "studentID": studentID,
-      "quizID": quizID,
-      "studentAnswers":
-          questions.map((question) => question.questionToMap()).toList()
+      'quizID': quizID,
+      'teacherID': teacherID,
+      'studentID': studentID,
+      'quizMode': quizMode,
+      'title': title,
+      'description': description,
+      'start_date': start_date?.toIso8601String(),
+      'end_date': end_date?.toIso8601String(),
+      'questions':
+          questions.map((question) => question.questionToMap()).toList(),
     };
   }
 
+  // Create Quiz from Map
+  static Quiz quizFromMap(Map<String, dynamic> map) {
+    return Quiz()
+      ..quizID = map['quizID'] ?? ""
+      ..teacherID = map['teacherID'] ?? ""
+      ..studentID = map['studentID'] ?? ""
+      ..quizMode = map['quizMode'] ?? "creation"
+      ..title = map['title'] ?? ""
+      ..description = map['description'] ?? ""
+      ..start_date =
+          map['start_date'] != null ? DateTime.parse(map['start_date']) : null
+      ..end_date =
+          map['end_date'] != null ? DateTime.parse(map['end_date']) : null
+      ..questions = (map['questions'] as List<dynamic>)
+          .map((questionMap) => Question.questionFromMap(questionMap))
+          .toList()
+          .cast<Question>();
+  }
+}
+
+
+  // Future<void> submit() async {
+  //   await saveResultsToDB();
+  // }
+
+  
   /// Save the Quiz to Firestore
   // Future<void> saveToDB() async {
   //   final quizCollection = FirebaseFirestore.instance.collection('quizzes');
@@ -105,24 +124,6 @@ class Quiz {
   //   return quiz;
   // }
 
-  /// Convert Quiz to Map
-  Map<String, dynamic> quizToMap() {
-    return {
-      "title": title,
-      "description": description,
-      'start_date': start_date?.toIso8601String(),
-      'end_date': end_date?.toIso8601String(),
-    };
-  }
 
-  /// Convert Map to Quiz
-  static Quiz fromMap(Map<String, dynamic> data) {
-    return Quiz()
-      ..title = data['title'] ?? ''
-      ..description = data['description'] ?? ''
-      ..start_date =
-          data['start_date'] != null ? DateTime.parse(data['start_date']) : null
-      ..end_date =
-          data['end_date'] != null ? DateTime.parse(data['end_date']) : null;
-  }
-}
+
+

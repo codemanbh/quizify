@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       initialRoute:
-          '/createQuizPage', // change to what you are currently work on
+          '/createQuiestionPage', // change to what you are currently work on
       routes: {
         // all the routs (pages) in the app
         '/createQuiestionPage': (context) => CreateQuestionPage(),

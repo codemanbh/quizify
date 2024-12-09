@@ -30,6 +30,18 @@ class Question {
     {"title": 'False', "value": 'false'},
   ];
 
+  Question();
+  // Constructor to initialize Question from a Map
+  Question.questionFromMap(Map<String, dynamic> data)
+      : questionID = data['questionID'] ?? '',
+        quizId = data['quizId'] ?? '',
+        question_type = data['question_type'] ?? '',
+        question_text = data['question_text'] ?? '',
+        possibleMcqAnswers =
+            List<String>.from(data['possibleMcqAnswers'] ?? []),
+        teacherCorrectAnswer = data['teacherCorrectAnswer'],
+        studentSelectedAnswer = data['studentSelectedAnswer'];
+
   /// Convert Question to Map
   Map<String, dynamic> questionToMap() {
     return {
@@ -37,20 +49,12 @@ class Question {
       "quizId": quizId,
       "question_type": question_type,
       "question_text": question_text,
+      "questionGrade": questionGrade,
+      "studentGrade": studentGrade,
+      "possibleMcqAnswers": possibleMcqAnswers,
       "teacherCorrectAnswer": teacherCorrectAnswer,
       "studentSelectedAnswer": studentSelectedAnswer,
     };
-  }
-
-  /// Convert Map to Question
-  questionFromMap(Map<String, dynamic> data) {
-    questionID = data['questionID'] ?? '';
-    quizId = data['quizId'] ?? '';
-    question_type = data['question_type'] ?? '';
-    question_text = data['question_text'] ?? '';
-    possibleMcqAnswers = List<String>.from(data['possibleMcqAnswers'] ?? []);
-    teacherCorrectAnswer = data['teacherCorrectAnswer'];
-    studentSelectedAnswer = data['studentSelectedAnswer'];
   }
 
   gradeQuestionAnswer() {

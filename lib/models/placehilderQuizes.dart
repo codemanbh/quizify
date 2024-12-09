@@ -4,7 +4,7 @@ import './Quiz.dart';
 class placeHolderQuizzes {
   // First Quiz: "Cat Basics"
   static Quiz quiz1 = Quiz()
-    ..id = "1"
+    ..quizID = "1"
     ..title = "Cat Basics"
     ..description = "Test your basic knowledge about cats."
     ..start_date = DateTime.now()
@@ -21,7 +21,8 @@ class placeHolderQuizzes {
           "20-25 years",
           "30+ years"
         ]
-        ..mcqCorrectAnswer = "10-15 years"
+        ..studentSelectedAnswer = "10-15 years"
+        ..teacherCorrectAnswer = "10-15 years"
         ..questionGrade = 5
         ..studentGrade = 0, // Default value
       Question()
@@ -29,14 +30,15 @@ class placeHolderQuizzes {
         ..quizId = "1"
         ..question_type = "TF"
         ..question_text = "Cats can purr only when they're happy."
-        ..tfCorrectAnswer = false
+        ..teacherCorrectAnswer = 'false'
+        ..studentSelectedAnswer = 'true'
         ..questionGrade = 3
         ..studentGrade = 0, // Default value
     ];
 
   // Second Quiz: "Feline Fun Facts"
   static Quiz quiz2 = Quiz()
-    ..id = "2"
+    ..quizID = "2"
     ..title = "Feline Fun Facts"
     ..description = "Learn some fun facts about cats."
     ..start_date = DateTime.now()
@@ -48,7 +50,7 @@ class placeHolderQuizzes {
         ..question_type = "MCQ"
         ..question_text = "Which breed of cat is known for being hairless?"
         ..possibleMcqAnswers = ["Sphynx", "Persian", "Maine Coon", "Ragdoll"]
-        ..mcqCorrectAnswer = "Sphynx"
+        ..teacherCorrectAnswer = "Sphynx"
         ..questionGrade = 5
         ..studentGrade = 0, // Default value
       Question()
@@ -56,14 +58,14 @@ class placeHolderQuizzes {
         ..quizId = "2"
         ..question_type = "WRITTEN"
         ..question_text = "Describe why cats often land on their feet."
-        ..writtenCorrectAnswer = "Cats use their righting reflex."
+        ..teacherCorrectAnswer = "Cats use their righting reflex."
         ..questionGrade = 10
         ..studentGrade = 0, // Default value
     ];
 
   // Third Quiz: "Advanced Cat Trivia" (New Quiz)
   static Quiz quiz3 = Quiz()
-    ..id = "3"
+    ..quizID = "3"
     ..title = "Advanced Cat Trivia"
     ..description = "Challenge yourself with advanced trivia about cats."
     ..start_date = DateTime.now()
@@ -80,7 +82,7 @@ class placeHolderQuizzes {
           "Panthera leo",
           "Lynx lynx"
         ]
-        ..mcqCorrectAnswer = "Felis catus"
+        ..teacherCorrectAnswer = "Felis catus"
         ..questionGrade = 7
         ..studentGrade = 0, // Default value
       Question()
@@ -88,7 +90,7 @@ class placeHolderQuizzes {
         ..quizId = "3"
         ..question_type = "TF"
         ..question_text = "Cats are obligate carnivores."
-        ..tfCorrectAnswer = true
+        ..teacherCorrectAnswer = 'true'
         ..questionGrade = 5
         ..studentGrade = 0, // Default value
       Question()
@@ -96,7 +98,7 @@ class placeHolderQuizzes {
         ..quizId = "3"
         ..question_type = "WRITTEN"
         ..question_text = "Explain how cats communicate with humans."
-        ..writtenCorrectAnswer =
+        ..teacherCorrectAnswer =
             "Cats communicate using vocalizations, body language, and behavior."
         ..questionGrade = 8
         ..studentGrade = 0, // Default value

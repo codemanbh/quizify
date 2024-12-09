@@ -66,7 +66,7 @@ class _TakeQuizPageState extends State<TakeQuizPage> {
             ),
             TextButton(
                 onPressed: () async {
-                  await quiz.submit();
+                  // await quiz.submit();
                 },
                 child: Text('Submit answer')),
             Text(user?.uid ?? 'no user found')

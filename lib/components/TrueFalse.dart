@@ -9,8 +9,8 @@ class TrueFalse extends StatefulWidget {
   });
 
   // Pass the initial answer state and a callback for changes
-  final bool selectedAnswer;
-  final ValueChanged<bool> onAnswerChanged;
+  final String selectedAnswer;
+  final ValueChanged<String> onAnswerChanged;
 
   @override
   State<TrueFalse> createState() => _TrueFalseState();
@@ -21,7 +21,7 @@ class _TrueFalseState extends State<TrueFalse> {
   Widget build(BuildContext context) {
     return Column(
       children: Question.trueFalseValues
-          .map((e) => RadioListTile<bool>(
+          .map((e) => RadioListTile<String>(
                 value: e['value'],
                 title: Text(e['title']),
                 groupValue: widget.selectedAnswer,

@@ -24,7 +24,12 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
   late TextEditingController questionTextController;
   late TextEditingController teacherCorrectAnswerController;
 
+  ValueNotifier<String> teacherMcqCorrectAnswerController =
+      ValueNotifier<String>('');
   List<bool> isSelected = [];
+
+  final ValueNotifier<List<String>> mcqCurrentPossibleAnswers =
+      ValueNotifier<List<String>>(["Item 1", "Item 2", "Item 3"]);
 
   @override
   void initState() {
@@ -41,33 +46,18 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
 
     isSelected = List.generate(quiz.questions.length + 1, (index) => false);
     isSelected[selectedQuestionIndex] = true;
+    mcqCurrentPossibleAnswers.value =
+        List.from(quiz.questions[selectedQuestionIndex].possibleMcqAnswers);
   }
 
   void saveCurrentEditedQuestion() {
-    quiz.questions[selectedQuestionIndex].question_text =
-        questionTextController.text;
-
-    switch (quiz.questions[selectedQuestionIndex].question_type) {
-      case 'TF':
-        // Save True/False specific data if necessary
-        break;
-
-      case 'MCQ':
-        // Save MCQ-specific data if necessary
-        break;
-
-      case 'WRITTEN':
-        quiz.questions[selectedQuestionIndex].writtenCorrectAnswer =
-            writtenCorrectAnswerController.text;
-        break;
+    if (quiz.questions[selectedQuestionIndex].question_type == 'WRITTEN') {
+      quiz.questions[selectedQuestionIndex].teacherCorrectAnswer =
+          teacherCorrectAnswerController.text;
     }
-
-    setState(() {});
   }
 
   void changeCurrentEditedQuestion(int index) {
-    saveCurrentEditedQuestion();
-
     if (index == quiz.questions.length) {
       // Add a new question
       quiz.questions.add(Question()
@@ -75,12 +65,25 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
         ..question_type = 'WRITTEN');
     }
 
+    if (quiz.questions[selectedQuestionIndex].question_type == 'MCQ') {
+      quiz.questions[selectedQuestionIndex].possibleMcqAnswers =
+          List.from(mcqCurrentPossibleAnswers.value);
+
+      quiz.questions[selectedQuestionIndex].teacherCorrectAnswer =
+          teacherMcqCorrectAnswerController.value;
+    }
+
     selectedQuestionIndex = index;
 
+    teacherMcqCorrectAnswerController.value =
+        quiz.questions[selectedQuestionIndex].teacherCorrectAnswer ?? '';
+
+    mcqCurrentPossibleAnswers.value =
+        List.from(quiz.questions[selectedQuestionIndex].possibleMcqAnswers);
     questionTextController.text =
         quiz.questions[selectedQuestionIndex].question_text;
 
-    writtenCorrectAnswerController.text =
+    teacherCorrectAnswerController.text =
         quiz.questions[selectedQuestionIndex].teacherCorrectAnswer ?? '';
 
     isSelected = List.generate(quiz.questions.length + 1, (i) => i == index);
@@ -116,76 +119,98 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
       appBar: AppBar(
         title: Text(quiz.title),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            ToggleButtons(
-              children: getListOfQuestions(),
-              isSelected: isSelected,
-              onPressed: changeCurrentEditedQuestion,
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Question Type',
-              style: TextStyle(fontSize: 16),
-            ),
-            Column(
-              children: Question.allQuestionTypes
-                  .map(
-                    (e) => RadioListTile(
-                      value: e['value'],
-                      title: Text(e['title']),
-                      groupValue:
-                          quiz.questions[selectedQuestionIndex].question_type,
-                      onChanged: (v) {
-                        if (v != null) {
-                          setState(() {
-                            quiz.questions[selectedQuestionIndex]
-                                .question_type = v;
-                          });
-                        }
-                      },
-                    ),
-                  )
-                  .toList(),
-            ),
-            TextField(
-              controller: questionTextController,
-              decoration: const InputDecoration(
-                labelText: 'Write the question',
-                border: OutlineInputBorder(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              ToggleButtons(
+                children: getListOfQuestions(),
+                isSelected: isSelected,
+                onPressed: changeCurrentEditedQuestion,
               ),
-            ),
-            const Divider(height: 20, thickness: 1),
-            if ('TF' == quiz.questions[selectedQuestionIndex].question_type)
-              TrueFalse(
-                selectedAnswer: quiz.questions[selectedQuestionIndex]
-                        .teacherCorrectAnswer ??
-                    '',
-                onAnswerChanged: (newTFAnswer) {
-                  quiz.questions[selectedQuestionIndex].tfCorrectAnswer =
-                      newTFAnswer;
+              const SizedBox(height: 10),
+              const Text(
+                'Question Type',
+                style: TextStyle(fontSize: 16),
+              ),
+              Column(
+                children: Question.allQuestionTypes
+                    .map(
+                      (e) => RadioListTile(
+                        // question_type
+                        value: e['value'],
+                        title: Text(e['title']),
+                        groupValue:
+                            quiz.questions[selectedQuestionIndex].question_type,
+                        onChanged: (v) {
+                          if (v != null) {
+                            setState(() {
+                              quiz.questions[selectedQuestionIndex]
+                                  .question_type = v;
+                            });
+
+                            // print(quiz
+                            //     .questions[selectedQuestionIndex].question_type);
+                          }
+                        },
+                      ),
+                    )
+                    .toList(),
+              ),
+              TextField(
+                // question Text feaild
+                controller: questionTextController,
+                decoration: const InputDecoration(
+                  labelText: 'Write the question',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const Divider(height: 20, thickness: 1),
+              if ('TF' == quiz.questions[selectedQuestionIndex].question_type)
+                TrueFalse(
+                  selectedAnswer: quiz.questions[selectedQuestionIndex]
+                          .teacherCorrectAnswer ??
+                      '',
+                  onAnswerChanged: (newTFAnswer) {
+                    quiz.questions[selectedQuestionIndex].teacherCorrectAnswer =
+                        newTFAnswer;
+                    setState(() {});
+                  },
+                ),
+              if ('MCQ' == quiz.questions[selectedQuestionIndex].question_type)
+                MCQ(
+                  possibleMcqAnswers: mcqCurrentPossibleAnswers,
+                  teacherCorrectAnswerController:
+                      teacherMcqCorrectAnswerController,
+                  onChange:
+                      (List<String> updatedAnswers, String correctAnswer) {
+                    print(updatedAnswers);
+                    print(correctAnswer);
+                    mcqCurrentPossibleAnswers.value = List.from(updatedAnswers);
+                    setState(() {});
+
+                    // print('Updated answers: ${quiz.questions[selectedQuestionIndex].possibleMcqAnswers}');
+                    // print('Correct answer: ${teacherCorrectAnswerController.value}');
+                  },
+                ),
+              if ('WRITTEN' ==
+                  quiz.questions[selectedQuestionIndex].question_type)
+                Written(controller: teacherCorrectAnswerController),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: saveCurrentEditedQuestion,
+                child: const Text('Save Question'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  saveCurrentEditedQuestion();
+                  // Add logic to finalize the quiz creation
                 },
+                child: const Text('Finish'),
               ),
-            if ('MCQ' == quiz.questions[selectedQuestionIndex].question_type)
-              MCQ(),
-            if ('WRITTEN' ==
-                quiz.questions[selectedQuestionIndex].question_type)
-              Written(controller: writtenCorrectAnswerController),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: saveCurrentEditedQuestion,
-              child: const Text('Save Question'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                saveCurrentEditedQuestion();
-                // Add logic to finalize the quiz creation
-              },
-              child: const Text('Finish'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
