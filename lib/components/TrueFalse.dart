@@ -2,27 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:quizify/models/Question.dart';
 
 class TrueFalse extends StatefulWidget {
-  const TrueFalse({super.key});
+  const TrueFalse({
+    super.key,
+    required this.selectedAnswer,
+    required this.onAnswerChanged,
+  });
+
+  // Pass the initial answer state and a callback for changes
+  final String selectedAnswer;
+  final ValueChanged<String> onAnswerChanged;
 
   @override
   State<TrueFalse> createState() => _TrueFalseState();
 }
 
 class _TrueFalseState extends State<TrueFalse> {
-  bool selectedAnswer = true;
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: Question.trueFalseValues
-          .map((e) => RadioListTile(
+          .map((e) => RadioListTile<String>(
                 value: e['value'],
                 title: Text(e['title']),
-                groupValue: selectedAnswer,
-                onChanged: (v) {
-                  if (v != null) {
-                    selectedAnswer = v;
-                    setState(() {});
+                groupValue: widget.selectedAnswer,
+                onChanged: (value) {
+                  if (value != null) {
+                    widget
+                        .onAnswerChanged(value); // Notify parent of the change
                   }
                 },
               ))

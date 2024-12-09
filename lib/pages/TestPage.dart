@@ -19,8 +19,9 @@ class _TestPageState extends State<TestPage> {
               onPressed: () async {
                 // placeHolderQuizes.quiz1.saveToDB();
 
-                Quiz q = await Quiz.retrieveFromDB('1');
-
+                Quiz q = placeHolderQuizzes.quiz1;
+                q.gradeAnswers();
+                q.saveQuizToDB();
                 print(q.title);
               },
               child: Text('save quiz'))

@@ -3,8 +3,8 @@ import '../../models/Question.dart';
 
 class TrueFalseWidget extends StatefulWidget {
   final String questionText;
-  final bool? selectedValue;
-  final ValueChanged<bool> onValueSelected;
+  final String? selectedValue;
+  final ValueChanged<String> onValueSelected;
 
   TrueFalseWidget({
     required this.questionText,
@@ -17,7 +17,7 @@ class TrueFalseWidget extends StatefulWidget {
 }
 
 class _TrueFalseWidgetState extends State<TrueFalseWidget> {
-  bool? _selectedValue;
+  String? _selectedValue;
 
   @override
   void initState() {
@@ -35,7 +35,7 @@ class _TrueFalseWidgetState extends State<TrueFalseWidget> {
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         for (var option in Question.trueFalseValues)
-          RadioListTile<bool>(
+          RadioListTile<String>(
             title: Text(option["title"]),
             value: option["value"],
             groupValue: _selectedValue,

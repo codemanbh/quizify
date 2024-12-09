@@ -35,7 +35,7 @@ class _TakeQuizPageState extends State<TakeQuizPage> {
     // print(qid);
 
     // quiz = await Quiz.retrieveFromDB('1');
-    quiz = placeHolderQuizes.quiz1;
+    quiz = placeHolderQuizzes.quiz1;
 
     // print("asdasdadas" + quiz.title);
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -59,14 +59,14 @@ class _TakeQuizPageState extends State<TakeQuizPage> {
           children: [
             Column(
                 children: quiz.questions
-                    .map((question) => question.toWidget())
+                    .map((question) => question.questionToWidget())
                     .toList()),
             SizedBox(
               height: 40,
             ),
             TextButton(
                 onPressed: () async {
-                  await quiz.submit();
+                  // await quiz.submit();
                 },
                 child: Text('Submit answer')),
             Text(user?.uid ?? 'no user found')
