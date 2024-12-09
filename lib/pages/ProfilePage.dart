@@ -94,28 +94,18 @@ class _ProfilePageState extends State<ProfilePage> {
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.grade_sharp,
-                                    size: 40, color: Colors.white),
-                              ),
-                              SizedBox(width: 20),
+                         
                               Card(
                                 shape: CircleBorder(),
                                 clipBehavior: Clip.antiAlias,
                                 child: Image.asset(
-                                  'assets/anynmous.jpg',
+                                  'assets/anonymous.jpg',
                                   fit: BoxFit.cover,
                                   width: 175,
                                   height: 175,
                                 ),
                               ),
-                              SizedBox(width: 20),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.settings,
-                                    color: Colors.white, size: 40),
-                              ),
+                          
                             ],
                           ),
                         ),
