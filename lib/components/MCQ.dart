@@ -19,6 +19,50 @@ class MCQ extends StatefulWidget {
 
 class _MCQState extends State<MCQ> {
   GlobalKey<AnimatedListState> animatedListKey = GlobalKey<AnimatedListState>();
+  late List<TextEditingController> controllers;
+
+  @override
+  void initState() {
+    super.initState();
+    controllers = widget.possibleMcqAnswers.value
+        .map((answer) => TextEditingController(text: answer))
+        .toList();
+
+    // Listen for changes to the answers and update controllers accordingly
+    widget.possibleMcqAnswers.addListener(_updateControllers);
+  }
+
+  @override
+  void dispose() {
+    // Dispose all controllers when the widget is removed
+    for (var controller in controllers) {
+      controller.dispose();
+    }
+    widget.possibleMcqAnswers
+        .removeListener(_updateControllers); // Remove listener
+    super.dispose();
+  }
+
+  void _updateControllers() {
+    final newAnswers = widget.possibleMcqAnswers.value;
+    if (newAnswers.length != controllers.length) {
+      // If the number of answers has changed, rebuild the controllers
+      setState(() {
+        // Ensure controllers list matches the length of possibleMcqAnswers list
+        controllers = List.generate(
+          newAnswers.length,
+          (index) => TextEditingController(text: newAnswers[index]),
+        );
+      });
+    } else {
+      // Only update the text in controllers if the answers list size hasn't changed
+      for (int i = 0; i < newAnswers.length; i++) {
+        if (controllers[i].text != newAnswers[i]) {
+          controllers[i].text = newAnswers[i];
+        }
+      }
+    }
+  }
 
   void _setCorrectAnswer(String answer) {
     widget.teacherCorrectAnswerController.value = answer;
@@ -52,11 +96,11 @@ class _MCQState extends State<MCQ> {
                       title: TextField(
                         decoration:
                             InputDecoration(labelText: 'Answer ${index + 1}'),
-                        controller: TextEditingController(text: answers[index]),
+                        controller: controllers[index],
+                        textDirection: TextDirection.ltr,
                         onChanged: (newValue) {
                           answers[index] = newValue;
-                          widget.possibleMcqAnswers.value = List.from(
-                              answers); // Notify listeners with the updated list
+                          widget.possibleMcqAnswers.value = List.from(answers);
                           _notifyChange(); // Notify parent about the changes in answers
                         },
                       ),
@@ -109,6 +153,8 @@ class _MCQState extends State<MCQ> {
           iconSize: 40,
           onPressed: () {
             widget.possibleMcqAnswers.value.add('');
+            controllers.add(TextEditingController(
+                text: '')); // Add new controller for the new answer
             _notifyChange(); // Notify parent after adding a new answer
             animatedListKey.currentState!
                 .insertItem(widget.possibleMcqAnswers.value.length - 1);

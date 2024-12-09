@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/Quiz.dart';
 import '../components/CustomNavBar.dart';
+import '../pages/CreateQuestionPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -101,8 +102,17 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
     // _startDateTime = null;
     // _endDateTime = null;
 
-    Navigator.of(context).pushReplacementNamed('/createQuiestionPage',
-        arguments: {'quiz': quiz});
+    // Navigator.of(context).pushReplacementNamed('/createQuiestionPage',
+    //     arguments: {'quiz': quiz});
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateQuestionPage(quiz: quiz),
+      ),
+    );
+    // Navigator.pushReplacement((context) => CreateQuestionPage());
+    // CreateQuestionPage
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Quiz created successfully!')),

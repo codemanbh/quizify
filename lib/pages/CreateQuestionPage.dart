@@ -11,7 +11,8 @@ import '../models/Quiz.dart';
 import '../models/placehilderQuizes.dart';
 
 class CreateQuestionPage extends StatefulWidget {
-  const CreateQuestionPage({super.key});
+  final Quiz quiz;
+  const CreateQuestionPage({Key? key, required this.quiz}) : super(key: key);
 
   @override
   State<CreateQuestionPage> createState() => _CreateQuestionPageState();
@@ -20,7 +21,7 @@ class CreateQuestionPage extends StatefulWidget {
 class _CreateQuestionPageState extends State<CreateQuestionPage> {
   late Quiz quiz;
   int selectedQuestionIndex = 0;
-
+  bool firstTime = true;
   late TextEditingController questionTextController;
   late TextEditingController teacherCorrectAnswerController;
 
@@ -34,7 +35,11 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
   @override
   void initState() {
     super.initState();
-    quiz = placeHolderQuizzes.quiz1;
+    quiz = widget.quiz;
+    // quiz = placeHolderQuizzes.quiz1;
+    // quiz = Quiz();
+    quiz.questions.add(Question());
+    // quiz.questions.add(Question());
 
     questionTextController = TextEditingController(
       text: quiz.questions[selectedQuestionIndex].question_text,
@@ -114,6 +119,18 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (firstTime) {
+      // Retrieve the passed arguments and check if they contain the 'quiz' key
+
+      if (quiz == null) {
+        // Handle the case where the quiz is null or not passed correctly.
+        return Scaffold(
+          appBar: AppBar(title: Text('Error')),
+          body: Center(child: Text('No quiz data passed')),
+        );
+      }
+    }
+    firstTime = false;
     return Scaffold(
       bottomNavigationBar: AdminCustom(),
       appBar: AppBar(
@@ -206,6 +223,12 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
                 onPressed: () {
                   saveCurrentEditedQuestion();
                   // Add logic to finalize the quiz creation
+
+                  quiz.saveQuizToDB();
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Quiz created successfully!')),
+                  );
                 },
                 child: const Text('Finish'),
               ),
