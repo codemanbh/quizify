@@ -27,7 +27,7 @@ class _StudentResultsState extends State<StudentResults> {
 
     try {
       // Fetch the quiz (await the result since getQuiz is asynchronous)
-      Quiz? quiz = await quizManager.getQuiz(quizID);
+      Quiz? quiz = await quizManager.getAttempt(quizID);
 
       setState(() {
         fetchedQuiz = quiz; // Update the fetchedQuiz state
@@ -67,6 +67,13 @@ class _StudentResultsState extends State<StudentResults> {
                     style: TextStyle(fontSize: 25),
                   ),
                 ),
+                const SizedBox(height: 20.0),
+                Center(
+                  child: Text(
+                    "You scored: ${fetchedQuiz!.studentGrade}/${fetchedQuiz!.questions.length} marks",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
                 const Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Text(
@@ -80,7 +87,7 @@ class _StudentResultsState extends State<StudentResults> {
                     itemBuilder: (context, index) {
                       Question question = fetchedQuiz!.questions[index];
                       return ListTile(
-                        shape: Border(bottom: BorderSide()),
+                        shape: Border(bottom: BorderSide(color: Colors.grey)),
                         title: Text(
                           "Question ${index + 1}: ${question.question_text}",
                           style: TextStyle(fontWeight: FontWeight.bold),
