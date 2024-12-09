@@ -42,6 +42,8 @@ class Question {
         teacherCorrectAnswer = data['teacherCorrectAnswer'],
         studentSelectedAnswer = data['studentSelectedAnswer'];
 
+  get text => null;
+
   /// Convert Question to Map
   Map<String, dynamic> questionToMap() {
     return {

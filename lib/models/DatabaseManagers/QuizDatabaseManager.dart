@@ -79,6 +79,23 @@ class QuizDatabaseManager {
     }
   }
 
+  Future<Quiz?> getAttempt(String quizID) async {
+    try {
+      DocumentSnapshot doc = await attemptCollection.doc(quizID).get();
+
+      if (doc.exists) {
+        // Convert the document data to a Quiz object
+        return Quiz.quizFromMap(doc.data() as Map<String, dynamic>);
+      } else {
+        print("Attempt with ID $quizID does not exist.");
+        return null;
+      }
+    } catch (e) {
+      print("Failed to fetch quiz: $e");
+      throw e;
+    }
+  }
+
   /// Delete a quiz from the Firebase database by ID
   // Future<void> deleteQuiz(String quizID) async {
   //   try {
