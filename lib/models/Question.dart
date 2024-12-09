@@ -13,7 +13,7 @@ class Question {
 
   List<String> possibleMcqAnswers = [];
 
-  double questionGrade = 0;
+  double questionGrade = 1;
   double? studentGrade;
 
   String? teacherCorrectAnswer;
@@ -74,6 +74,10 @@ class Question {
 
   /// Convert Question to a Solvable Widget
   Widget questionToWidget() {
+    // if (studentSelectedAnswer == null) {
+    //   studentSelectedAnswer = '';
+    // }
+
     switch (question_type) {
       case "MCQ":
         return MCQWidget(
@@ -87,7 +91,7 @@ class Question {
       case "TF":
         return TrueFalseWidget(
           questionText: question_text,
-          selectedValue: teacherCorrectAnswer,
+          selectedValue: studentSelectedAnswer,
           onValueSelected: (value) {
             teacherCorrectAnswer = value;
           },
@@ -95,13 +99,13 @@ class Question {
       case "WRITTEN":
         return WrittenWidget(
           questionText: question_text,
-          initialAnswer: teacherCorrectAnswer,
+          initialAnswer: studentSelectedAnswer,
           onAnswerChanged: (value) {
-            teacherCorrectAnswer = value;
+            studentSelectedAnswer = value;
           },
         );
       default:
-        return Text("Unsupported question type: $question_type");
+        return SizedBox();
     }
   }
 }

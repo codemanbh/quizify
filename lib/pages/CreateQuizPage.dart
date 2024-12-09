@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/Quiz.dart';
-import '../components/CustomNavBar.dart';
+import '../components/AdminCustomNavBar.dart';
 import '../pages/CreateQuestionPage.dart';
 
 void main() {
@@ -189,7 +189,7 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
       appBar: AppBar(
         title: Text('Create Quiz'),
       ),
-      bottomNavigationBar: CustomNavBar(),
+      bottomNavigationBar: AdminCustomNavBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

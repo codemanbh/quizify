@@ -21,7 +21,7 @@ class _TestPageState extends State<TestPage> {
 
                 Quiz q = placeHolderQuizzes.quiz1;
                 q.gradeAnswers();
-                q.saveQuizToDB();
+                q.submitQuizTeacher();
                 print(q.title);
               },
               child: Text('save quiz'))

@@ -1,11 +1,8 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quizify/pages/LoginPage.dart';
 import '../components/CustomNavBar.dart';
-
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -19,16 +16,14 @@ class _ProfilePageState extends State<ProfilePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   String? userName = "Loading...";
-  String? email = "Loading..."; 
-    String? role = "Loading..."; 
-      bool isLoading = true; 
-
-
+  String? email = "Loading...";
+  String? role = "Loading...";
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    FetchName(); 
+    FetchName();
   }
 
   Future<void> FetchName() async {
@@ -36,16 +31,14 @@ class _ProfilePageState extends State<ProfilePage> {
       User? user = _auth.currentUser;
 
       if (user != null) {
-      
         DocumentReference doc = _firestore.collection("users").doc(user.uid);
 
         doc.get().then((value) {
           setState(() {
-            userName = value.get('name'); 
-            email =value.get('email');
-            role=value.get('role');
-            isLoading = false; 
-
+            userName = value.get('name');
+            email = value.get('email');
+            role = value.get('role');
+            isLoading = false;
           });
         }).catchError((e) {
           print("Error fetching user name: $e");
@@ -74,90 +67,98 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       bottomNavigationBar: CustomNavBar(),
       body: isLoading
-          ? Center(child: CircularProgressIndicator()): 
-          Column(
-        children: [
-          Container(
-            width: double.infinity,
-            height: 300,
-            child: Card(
-              margin: EdgeInsets.zero,
-              clipBehavior: Clip.antiAlias,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
-              ),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.asset(
-                    'assets/mountain.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                  Center(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ? Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 300,
+                  child: Card(
+                    margin: EdgeInsets.zero,
+                    clipBehavior: Clip.antiAlias,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        topRight: Radius.circular(8),
+                      ),
+                    ),
+                    child: Stack(
+                      fit: StackFit.expand,
                       children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.grade_sharp, size: 40, color: Colors.white),
+                        Image.asset(
+                          'assets/mountain.jpg',
+                          fit: BoxFit.cover,
                         ),
-                        SizedBox(width: 20),
-                        Card(
-                          shape: CircleBorder(),
-                          clipBehavior: Clip.antiAlias,
-                          child: Image.asset(
-                            'assets/diddy.webp',
-                            fit: BoxFit.cover,
-                            width: 175,
-                            height: 175,
+                        Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.grade_sharp,
+                                    size: 40, color: Colors.white),
+                              ),
+                              SizedBox(width: 20),
+                              Card(
+                                shape: CircleBorder(),
+                                clipBehavior: Clip.antiAlias,
+                                child: Image.asset(
+                                  'assets/anynmous.jpg',
+                                  fit: BoxFit.cover,
+                                  width: 175,
+                                  height: 175,
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.settings,
+                                    color: Colors.white, size: 40),
+                              ),
+                            ],
                           ),
-                        ),
-                        SizedBox(width: 20),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.settings, color: Colors.white, size: 40),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                Text(
+                  "Username: $userName",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "email: $email",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "Role: $role",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      signOut(context);
+                    },
+                    child: Text(
+                      "SignOut",
+                      style: TextStyle(color: Colors.red, fontSize: 20),
+                    ))
+              ],
             ),
-          ),
-          Text(
-           "Username: $userName"  ,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          Text(
-    "email: $email",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-                  Text(
-    "Role: $role", 
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          ElevatedButton(onPressed: (){
-            signOut(context);
-          }, 
-          child: Text("SignOut",style: TextStyle(color: Colors.red,fontSize: 20),))
-        ],
-      ),
     );
   }
 }
+
 Future<void> signOut(BuildContext context) async {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-try {
-await _auth.signOut();
-_auth.authStateChanges();
-Navigator.pushReplacement(context,          
- MaterialPageRoute(builder: (context) => LoginPage()),
-);
-} catch (e) {
-print("Error in signOut: ${e.toString()}");
-}
+  try {
+    await _auth.signOut();
+    _auth.authStateChanges();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  } catch (e) {
+    print("Error in signOut: ${e.toString()}");
+  }
 }
