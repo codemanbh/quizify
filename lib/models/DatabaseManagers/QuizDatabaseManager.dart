@@ -7,20 +7,49 @@ class QuizDatabaseManager {
   final CollectionReference quizzesCollection =
       FirebaseFirestore.instance.collection('quizzes');
 
+  final CollectionReference attemptCollection =
+      FirebaseFirestore.instance.collection('attempts');
+
   Future<void> deleteQuiz(Quiz quiz) async {
     quizzesCollection.doc(quiz.quizID).delete();
   }
 
   /// Adds a quiz to the Firebase database without specifying an ID
-  Future<void> addQuiz(Quiz quiz) async {
+  Future<void> addTeacherQuiz(Quiz quiz) async {
     Map<String, dynamic> quizMap = quiz.quizToMap();
     DocumentReference docRef;
     try {
       // Convert the quiz to a map
       if (quiz.quizID == null || quiz.quizID == '') {
-        docRef = await quizzesCollection.add(quizMap);
+        docRef = await quizzesCollection.doc();
+        quiz.quizID = docRef.id;
+        quizMap = quiz.quizToMap();
+        docRef.set(quizMap);
       } else {
         docRef = await quizzesCollection.doc(quiz.quizID);
+        await docRef.set(quizMap);
+      }
+      // Add the quiz to Firestore, letting Firestore generate the document ID
+
+      // print("Quiz added successfully with ID: ${docRef.id}");
+    } catch (e) {
+      print("Failed to add quiz: $e");
+      throw e; // Re-throw the exception for error handling
+    }
+  }
+
+  Future<void> addStudentAttempt(Quiz quiz) async {
+    Map<String, dynamic> quizMap = quiz.quizToMap();
+    DocumentReference docRef;
+    try {
+      // Convert the quiz to a map
+      if (quiz.attemptID == null || quiz.attemptID == '') {
+        docRef = await attemptCollection.doc();
+        quiz.attemptID = docRef.id;
+        quizMap = quiz.quizToMap();
+        docRef.set(quizMap);
+      } else {
+        docRef = await attemptCollection.doc(quiz.attemptID);
         await docRef.set(quizMap);
       }
       // Add the quiz to Firestore, letting Firestore generate the document ID

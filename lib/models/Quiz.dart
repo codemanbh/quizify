@@ -6,6 +6,7 @@ import './DatabaseManagers/QuizDatabaseManager.dart';
 
 class Quiz {
   String quizID = "";
+  String attemptID = '';
   String teacherID = "";
   String studentID = "";
   String quizMode = "creation";
@@ -14,12 +15,42 @@ class Quiz {
   DateTime? start_date;
   DateTime? end_date;
   List<Question> questions = [];
+  int studentGrade = 0;
 
   static List<String> quizModes = ['creation', 'attempt'];
 
-  void saveQuizToDB() {
+  // void saveQuizToDB(String collection_name) {
+  //   QuizDatabaseManager qdm = QuizDatabaseManager();
+  //   qdm.addTeacherQuiz(this);
+  // }
+
+  Future<void> submitQuizTeacher() async {
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
+
+    teacherID = await user?.uid ?? "";
+    quizMode = 'creation';
+
+    // saveQuizToDB('attempts');
     QuizDatabaseManager qdm = QuizDatabaseManager();
-    qdm.addQuiz(this);
+    qdm.addTeacherQuiz(this);
+  }
+
+  Future<void> submitQuizStudent() async {
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
+
+    studentID = await user?.uid ?? "";
+    quizMode = 'attempt';
+
+    gradeAnswers();
+
+    // print(this.quizToMap());
+    QuizDatabaseManager qdm = QuizDatabaseManager();
+    qdm.addStudentAttempt(this);
+    // saveQuizToDB('quizzes');
   }
 
   Future<void> deleteQuiz() async {
@@ -32,6 +63,10 @@ class Quiz {
 
     for (int i = 0; i < questions.length; i++) {
       questions[i].gradeQuestionAnswer();
+      if (questions[i].studentGrade != null &&
+          questions[i]!.studentGrade! > 0) {
+        studentGrade++;
+      }
     }
   }
 
@@ -44,8 +79,10 @@ class Quiz {
       'quizMode': quizMode,
       'title': title,
       'description': description,
+      'attemptID': attemptID,
       'start_date': start_date?.toIso8601String(),
       'end_date': end_date?.toIso8601String(),
+      "studentGrade": studentGrade,
       'questions':
           questions.map((question) => question.questionToMap()).toList(),
     };
@@ -60,7 +97,9 @@ class Quiz {
         ..studentID = map['studentID'] ?? ""
         ..quizMode = map['quizMode'] ?? "creation"
         ..title = map['title'] ?? ""
+        ..attemptID = map['attemptID'] ?? ''
         ..description = map['description'] ?? ""
+        ..studentGrade = map['studentGrade'] ?? 0
         ..start_date =
             map['start_date'] != null ? DateTime.parse(map['start_date']) : null
         ..end_date =

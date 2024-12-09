@@ -24,6 +24,7 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
   bool firstTime = true;
   late TextEditingController questionTextController;
   late TextEditingController teacherCorrectAnswerController;
+  late TextEditingController question;
 
   ValueNotifier<String> teacherMcqCorrectAnswerController =
       ValueNotifier<String>('');
@@ -226,7 +227,7 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
                   saveCurrentEditedQuestion();
                   // Add logic to finalize the quiz creation
 
-                  quiz.saveQuizToDB();
+                  quiz.submitQuizTeacher();
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Quiz created successfully!')),
