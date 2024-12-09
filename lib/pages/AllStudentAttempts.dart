@@ -4,6 +4,7 @@ import 'package:quizify/components/CustomNavBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:quizify/components/StudentAttemptsSearch.dart';
 import 'package:quizify/models/Quiz.dart';
 import './StudentResults.dart';
 
@@ -60,6 +61,13 @@ class _AllStudentAttemptsState extends State<AllStudentAttempts> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Done quizzes'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showSearch(context: context, delegate: StudentAttemptsSearch());
+              },
+              icon: Icon(Icons.search))
+        ],
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())

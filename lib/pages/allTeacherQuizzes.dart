@@ -8,6 +8,7 @@ import 'package:quizify/models/Quiz.dart';
 import 'package:quizify/pages/EditQuizPage.dart';
 import 'package:quizify/pages/GradeStudentAnswer.dart';
 import './CreateQuestionPage.dart';
+import 'package:flutter/services.dart';
 
 class allTeacherQuizzes extends StatefulWidget {
   const allTeacherQuizzes({super.key});
@@ -75,11 +76,23 @@ class _allTeacherQuizzesState extends State<allTeacherQuizzes> {
                         queryQuiz();
                       },
                       icon: Icon(Icons.delete)),
-                  subtitle: Text("ID: ${quizzes[index].quizID}"),
+                  subtitle: Text(quizzes[index].description ?? '',
+                      maxLines: 2, overflow: TextOverflow.ellipsis),
                   trailing: SizedBox(
-                    width: 80,
+                    width: 120,
                     child: Row(
                       children: [
+                        IconButton(
+                            onPressed: () {
+                              Clipboard.setData(ClipboardData(
+                                      text: quizzes[index].quizID))
+                                  .then((_) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Quiz ID is copied')),
+                                );
+                              });
+                            },
+                            icon: Icon(Icons.copy)),
                         IconButton(
                             onPressed: () {
                               Navigator.pushReplacement(
