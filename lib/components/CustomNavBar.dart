@@ -37,7 +37,8 @@ class _CustomNavBarState extends State<CustomNavBar> {
         currentIndex: currentIndex,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.input), label: 'enter quiz'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'attempts'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.list_alt), label: 'attempts'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'account'),
         ]);
   }

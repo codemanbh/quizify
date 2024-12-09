@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quizify/models/Quiz.dart';
+import 'package:quizify/pages/EditQuizPage.dart';
 import 'package:quizify/pages/GradeStudentAnswer.dart';
 import './CreateQuestionPage.dart';
 
@@ -85,7 +86,7 @@ class _allTeacherQuizzesState extends State<allTeacherQuizzes> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => GradeStudentAnswer(
-                                    quizID: quiz?.quizID ?? '',
+                                    quizID: quizzes[index].quizID ?? '',
                                   ),
                                 ),
                               );
@@ -96,9 +97,10 @@ class _allTeacherQuizzesState extends State<allTeacherQuizzes> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      CreateQuestionPage(quiz: quizzes[index]),
-                                ),
+                                    builder: (context) =>
+                                        EditQuizPage(quiz: quizzes[index])
+                                    // CreateQuestionPage(quiz: quizzes[index]),
+                                    ),
                               );
                             },
                             icon: Icon(Icons.edit)),

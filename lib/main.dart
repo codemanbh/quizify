@@ -28,6 +28,7 @@ import './pages/CreateQuizPage.dart';
 import './pages/allTeacherQuizzes.dart';
 import './pages/AllStudentAttempts.dart';
 
+// timed qBfcBdYlchWj8VmNovCA
 void main() async {
   await dotenv.load(); // loud the env variables
 
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       initialRoute:
-          '/allStudentAttempts', // change to what you are currently work on
+          '/createQuizPage', // change to what you are currently work on
       // change to what you are currently work on
       routes: {
         // all the routs (pages) in the app
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
         '/gradingPage': (context) => GradingPage(),
         '/reportPage': (context) => ReportPage(),
         // '/takeQuizPage': (context) => TakeQuizPage(),
-        '/editQuizPage': (context) => EditQuizPage(),
+        // '/editQuizPage': (context) => EditQuizPage(),
         '/quizManagementPage': (context) => QuizManagementPage(),
         // '/studentResults': (context) => StudentResults(),
         '/allQuizQuestionsPage': (context) => AllQuizQuestionsPage(),

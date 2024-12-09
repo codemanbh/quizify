@@ -42,7 +42,7 @@ class Quiz {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User? user = _auth.currentUser;
 
-    studentID = await user?.uid ?? "";
+    studentID = await user?.uid ?? "no id found";
     quizMode = 'attempt';
 
     gradeAnswers();

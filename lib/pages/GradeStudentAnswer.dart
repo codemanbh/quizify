@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:quizify/components/AdminCustomNavBar.dart';
 import 'package:quizify/models/Quiz.dart';
 
 class GradeStudentAnswer extends StatefulWidget {
@@ -19,6 +20,9 @@ class _GradeStudentAnswerState extends State<GradeStudentAnswer> {
     // TODO: implement initState
     super.initState();
     quizID = widget.quizID;
+    print('aaaaaaaaaaaaaaaaaaaaaa');
+    print(quizID);
+
     fetchAttemtps();
   }
 
@@ -30,7 +34,10 @@ class _GradeStudentAnswerState extends State<GradeStudentAnswer> {
         await attemptsCollectionRef.where('quizID', isEqualTo: quizID).get();
 
     attemptsSnapShot.docs.forEach((attemptMap) {
-      Quiz oneAttempt = Quiz.quizFromMap(attemptMap as Map<String, dynamic>);
+      Quiz oneAttempt = Quiz();
+      try {
+        oneAttempt = Quiz.quizFromMap(attemptMap as Map<String, dynamic>);
+      } catch (e) {}
       // oneAttempt.attemptID =
       attempts.add(oneAttempt);
     });
@@ -44,13 +51,18 @@ class _GradeStudentAnswerState extends State<GradeStudentAnswer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Students attempts')),
-      body: ListView.builder(
-          itemCount: attempts.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(attempts[index].studentID),
-            );
-          }),
+      bottomNavigationBar: AdminCustomNavBar(page_url: '/allTeacherQuizzes'),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: attempts.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(attempts[index].studentID),
+                  ),
+                );
+              }),
       // body: ,
     );
   }
