@@ -53,7 +53,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       initialRoute:
+<<<<<<< HEAD
           '/createQuizPage', // change to what you are currently work on
+=======
+          '/loginPage', // change to what you are currently work on
+>>>>>>> 16cd22f1d2a2c9d6c5e59345c864f7b885e25b16
       // change to what you are currently work on
       routes: {
         // all the routs (pages) in the app

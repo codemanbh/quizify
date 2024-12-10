@@ -209,9 +209,9 @@ String? validateMail(String? mail) {
     return "Email cannot be empty";
   }
 
-  final emailValidator = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$');
+  final emailValidator = RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com');
   if (!emailValidator.hasMatch(mail)) {
-    return "Invalid email address";
+    return "Invalid email address try somthing like example@gmail.com";
   }
   return null;
 }
