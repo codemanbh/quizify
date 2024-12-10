@@ -16,26 +16,24 @@ class QuizDatabaseManager {
 
   /// Adds a quiz to the Firebase database without specifying an ID
   Future<void> addTeacherQuiz(Quiz quiz) async {
-    Map<String, dynamic> quizMap = quiz.quizToMap();
     DocumentReference docRef;
+
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
+    quiz.teacherID = await user?.uid ?? '';
+
     try {
       // Convert the quiz to a map
       if (quiz.quizID == null || quiz.quizID == '') {
         docRef = await quizzesCollection.doc();
         quiz.quizID = docRef.id;
-        print('savvvvvvvvvvvvvvvvvvved');
-
         print(docRef.id);
 
-        quizMap = quiz.quizToMap();
-        docRef.set(quizMap);
+        docRef.set(quiz.quizToMap());
       } else {
         docRef = await quizzesCollection.doc(quiz.quizID);
-        print('savvvvvvvvvvvvvvvvvvved');
-
-        print(docRef.id);
-
-        await docRef.set(quizMap);
+        await docRef.set(quiz.quizToMap());
       }
 
       // Add the quiz to Firestore, letting Firestore generate the document ID
@@ -48,18 +46,23 @@ class QuizDatabaseManager {
   }
 
   Future<void> addStudentAttempt(Quiz quiz) async {
-    Map<String, dynamic> quizMap = quiz.quizToMap();
     DocumentReference docRef;
+
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
+    quiz.studentID = await user?.uid ?? '';
+
     try {
       // Convert the quiz to a map
       if (quiz.attemptID == null || quiz.attemptID == '') {
         docRef = await attemptCollection.doc();
         quiz.attemptID = docRef.id;
-        quizMap = quiz.quizToMap();
-        docRef.set(quizMap);
+
+        docRef.set(quiz.quizToMap());
       } else {
         docRef = await attemptCollection.doc(quiz.attemptID);
-        await docRef.set(quizMap);
+        await docRef.set(quiz.quizToMap());
       }
       // Add the quiz to Firestore, letting Firestore generate the document ID
 

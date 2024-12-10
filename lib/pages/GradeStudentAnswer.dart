@@ -57,6 +57,7 @@ class _GradeStudentAnswerState extends State<GradeStudentAnswer> {
           : ListView.builder(
               itemCount: attempts.length,
               itemBuilder: (context, index) {
+                print(attempts[index].quizToMap());
                 return Card(
                   child: ListTile(
                     title: Text(attempts[index].studentID),

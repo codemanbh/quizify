@@ -39,7 +39,9 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
     quiz = widget.quiz;
     // quiz = placeHolderQuizzes.quiz1;
     // quiz = Quiz();
-    quiz.questions.add(Question());
+    if (quiz.questions.length == 0) {
+      quiz.questions.add(Question());
+    }
     // quiz.questions.add(Question());
 
     questionTextController = TextEditingController(

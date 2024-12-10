@@ -36,6 +36,8 @@ class _StudentResultsState extends State<StudentResults> {
         fetchedQuiz = quiz; // Update the fetchedQuiz state
       });
 
+      print(fetchedQuiz?.quizToMap());
+
       if (quiz != null) {
         print("Quiz Title: ${quiz.title}");
         print("Description: ${quiz.description}");
