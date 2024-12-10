@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quizify/pages/LoginPage.dart';
-import '../components/AdminCustom.dart';
+import '../components/AdminCustomNavBar.dart';
 
 class AdminProfilePage extends StatefulWidget {
   const AdminProfilePage({super.key});
@@ -15,19 +15,18 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  String? userName = "Loading..."; // Placeholder for the user name
-  String? email = "Loading..."; // Placeholder for the user email
-  String? role = "Loading..."; // Placeholder for the user role
-
+  String? userName = "Loading...";
+  String? email = "Loading...";
+  String? role = "Loading...";
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    FetchAdminName(); // Fetch the user's name when the widget initializes
+    FetchName();
   }
 
-  Future<void> FetchAdminName() async {
+  Future<void> FetchName() async {
     try {
       User? user = _auth.currentUser;
 
@@ -66,7 +65,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: AdminCustom(),
+      bottomNavigationBar: AdminCustomNavBar(page_url: '/adminProfilePage'),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : Column(
@@ -95,27 +94,15 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.grade_sharp,
-                                    size: 40, color: Colors.white),
-                              ),
-                              SizedBox(width: 20),
                               Card(
                                 shape: CircleBorder(),
                                 clipBehavior: Clip.antiAlias,
                                 child: Image.asset(
-                                  'assets/diddy.jpg',
+                                  'assets/anonymous.jpg',
                                   fit: BoxFit.cover,
                                   width: 175,
                                   height: 175,
                                 ),
-                              ),
-                              SizedBox(width: 20),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.settings,
-                                    color: Colors.white, size: 40),
                               ),
                             ],
                           ),
@@ -129,7 +116,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "Email: $email",
+                  "email: $email",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 Text(

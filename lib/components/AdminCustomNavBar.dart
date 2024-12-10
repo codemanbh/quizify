@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import '../models/AuthManager.dart';
 
-class CustomNavBar extends StatefulWidget {
+class AdminCustomNavBar extends StatefulWidget {
   final String page_url;
-  const CustomNavBar({Key? key, required this.page_url}) : super(key: key);
+  const AdminCustomNavBar({Key? key, required this.page_url}) : super(key: key);
 
   @override
-  State<CustomNavBar> createState() => _CustomNavBarState();
+  State<AdminCustomNavBar> createState() => _AdminCustomNavBarState();
 }
 
-class _CustomNavBarState extends State<CustomNavBar> {
+class _AdminCustomNavBarState extends State<AdminCustomNavBar> {
   String page_url = '';
 
   @override
@@ -22,7 +22,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    List pages = ['/enterQuizIdPage', '/allStudentAttempts', '/profilePage'];
+    List pages = ['/createQuizPage', '/allTeacherQuizzes', '/adminProfilePage'];
 
     int currentIndex = pages.indexOf(page_url);
 
@@ -36,9 +36,10 @@ class _CustomNavBarState extends State<CustomNavBar> {
         // pages.indexOf(page_url)
         currentIndex: currentIndex,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.input), label: 'enter quiz'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.list_alt), label: 'attempts'),
+              icon: Icon(Icons.input), label: 'Create Quiz'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.list_alt_outlined), label: 'all quizes'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'account'),
         ]);
   }

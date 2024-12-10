@@ -15,7 +15,7 @@ class _ReportPageState extends State<ReportPage> {
       appBar: AppBar(
         title: Text('Report'),
       ),
-      bottomNavigationBar: CustomNavBar(),
+      // bottomNavigationBar: CustomNavBar(),
     );
   }
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../models/Quiz.dart';
+import '../components/AdminCustomNavBar.dart';
+import '../pages/CreateQuestionPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,7 +41,7 @@ class HomePage extends StatelessWidget {
               child: Text('Create Quiz'),
             ),
             SizedBox(height: 10),
-            Text('Creat a new qize.',
+            Text('Creat a new Quiz',
                 style: TextStyle(
                     fontSize: 16,
                     color: Colors.red,
@@ -67,7 +70,7 @@ class CreateQuizPage extends StatefulWidget {
 }
 
 class _CreateQuizPageState extends State<CreateQuizPage> {
-  final TextEditingController _questionController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   TextEditingController _startDateTimeController = TextEditingController();
   TextEditingController _endDateTimeController = TextEditingController();
@@ -75,24 +78,41 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
   DateTime? _startDateTime;
   DateTime? _endDateTime;
 
-  void _createQuiz() {
-    final quiz = {
-      'questionText': _questionController.text,
-      'description': _descriptionController.text,
-      'startDateTime': _startDateTime?.toIso8601String(),
-      'endDateTime': _endDateTime?.toIso8601String(),
-    };
+  void goToCreateQuestionPage() {
+    // final quiz = {
+    //   'questionText': _questionController.value.text,
+    //   'description': _descriptionController.value.text, // TODO: make the get date logic
+    // 'startDateTime': _startDateTimeController.value?..toIso8601String(),
+    // 'endDateTime': _endDateTime?.toIso8601String(),
+    // };
 
-    print('Quiz Created: $quiz');
+    Quiz quiz = Quiz();
+    quiz.title = _titleController.value.text;
+    quiz.description = _descriptionController.value.text;
+    quiz.start_date = _startDateTime;
+    quiz.end_date = _endDateTime;
+
+    // print('Quiz Created: $quiz');
 
     // Clear inputs
-    _questionController.clear();
-    _descriptionController.clear();
-    _startDateTimeController.clear();
-    _endDateTimeController.clear();
-    _startDateTime = null;
-    _endDateTime = null;
+    // _questionController.clear();
+    // _descriptionController.clear();
+    // _startDateTimeController.clear();
+    // _endDateTimeController.clear();
+    // _startDateTime = null;
+    // _endDateTime = null;
 
+    // Navigator.of(context).pushReplacementNamed('/createQuiestionPage',
+    //     arguments: {'quiz': quiz});
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateQuestionPage(quiz: quiz),
+      ),
+    );
+    // Navigator.pushReplacement((context) => CreateQuestionPage());
+    // CreateQuestionPage
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Quiz created successfully!')),
     );
@@ -168,6 +188,9 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
       appBar: AppBar(
         title: Text('Create Quiz'),
       ),
+      bottomNavigationBar: AdminCustomNavBar(
+        page_url: '/createQuizPage',
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -175,8 +198,8 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
           children: [
             SizedBox(height: 20),
             TextField(
-              controller: _questionController,
-              decoration: InputDecoration(labelText: 'Question Title'),
+              controller: _titleController,
+              decoration: InputDecoration(labelText: 'Quiz Title'),
             ),
             TextField(
               controller: _descriptionController,
@@ -208,7 +231,7 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _createQuiz,
+              onPressed: goToCreateQuestionPage,
               child: Text('Create Quiz'),
             ),
           ],

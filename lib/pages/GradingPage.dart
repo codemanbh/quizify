@@ -12,7 +12,7 @@ class _GradingPageState extends State<GradingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: CustomNavBar(),
-    );
+        // bottomNavigationBar: CustomNavBar(),
+        );
   }
 }

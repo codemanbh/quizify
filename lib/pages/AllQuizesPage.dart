@@ -44,7 +44,7 @@ class _AllQuizesPageState extends State<AllQuizesPage> {
         title: Text('All quizes'),
       ),
       // bottomNavigationBar: ,
-      bottomNavigationBar: CustomNavBar(),
+      bottomNavigationBar: CustomNavBar(page_url: '/allQuizQuestionsPage'),
       body: Container(
         margin: EdgeInsets.all(5),
         child: ListView.builder(

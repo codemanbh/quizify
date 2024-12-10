@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               _header(context),
               _inputField(context),
-              _forgotPassword(context),
+              // _forgotPassword(context),
               if (errorMessage != null) _errorMessage(context),
               _signup(context),
             ],

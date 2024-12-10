@@ -11,7 +11,7 @@ import 'package:quizify/pages/AdminProfilePage.dart';
 import 'package:quizify/pages/ProfilePage.dart';
 
 // pages
-import './pages/CreateQuiestionPage.dart';
+import './pages/CreateQuestionPage.dart';
 import './pages/GradingPage.dart';
 import './pages/ReportPage.dart';
 import './pages/EditQuizPage.dart';
@@ -24,9 +24,13 @@ import './pages/AllQuizesPage.dart';
 import './pages/TestPage.dart';
 import './pages/LoginPage.dart';
 import './pages/EnterQuizIdPage.dart';
+import './pages/CreateQuizPage.dart';
+import './pages/allTeacherQuizzes.dart';
+import './pages/AllStudentAttempts.dart';
 
+// timed qBfcBdYlchWj8VmNovCA
 void main() async {
-  await dotenv.load(); // loud the env variables
+  await dotenv.load(fileName: 'assets/.env'); // loud the env variables
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -48,17 +52,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      initialRoute:
-          '/enterQuizIdPage', // change to what you are currently work on
+      initialRoute: '/loginPage', // change to what you are currently work on
+      // change to what you are currently work on
       routes: {
         // all the routs (pages) in the app
-        '/createQuiestionPage': (context) => CreateQuiestionPage(),
+        // '/createQuiestionPage': (context) => CreateQuestionPage(),
         '/gradingPage': (context) => GradingPage(),
         '/reportPage': (context) => ReportPage(),
-        '/takeQuizPage': (context) => TakeQuizPage(),
-        '/editQuizPage': (context) => EditQuizPage(),
+        // '/takeQuizPage': (context) => TakeQuizPage(),
+        // '/editQuizPage': (context) => EditQuizPage(),
         '/quizManagementPage': (context) => QuizManagementPage(),
-        '/studentResults': (context) => StudentResults(),
+        // '/studentResults': (context) => StudentResults(),
         '/allQuizQuestionsPage': (context) => AllQuizQuestionsPage(),
         '/signupPage': (context) => SignupPage(),
         '/allQuizesPage': (context) => AllQuizesPage(),
@@ -66,7 +70,11 @@ class MyApp extends StatelessWidget {
         '/loginPage': (context) => LoginPage(),
         '/enterQuizIdPage': (context) => EnterQuizIdPage(),
         // '/testPage': (context) =>
-        '/AdminProfilePage': (context) => AdminProfilePage()
+        '/adminProfilePage': (context) => AdminProfilePage(),
+        '/createQuizPage': (context) => CreateQuizPage(),
+        '/testPage': (context) => TestPage(),
+        '/allTeacherQuizzes': (context) => allTeacherQuizzes(),
+        '/allStudentAttempts': (context) => AllStudentAttempts()
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
