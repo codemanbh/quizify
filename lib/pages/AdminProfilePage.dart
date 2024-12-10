@@ -94,7 +94,6 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                        
                               Card(
                                 shape: CircleBorder(),
                                 clipBehavior: Clip.antiAlias,
@@ -105,7 +104,6 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                                   height: 175,
                                 ),
                               ),
-                           
                             ],
                           ),
                         ),

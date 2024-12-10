@@ -32,18 +32,25 @@ class _AllStudentAttemptsState extends State<AllStudentAttempts> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User? user = await _auth.currentUser;
     String uid = await user?.uid ?? '';
+    List<Quiz> attemptsTemp = [];
 
     CollectionReference attemptsRef =
         FirebaseFirestore.instance.collection('attempts');
 
-    attemptsRef.get().then((querySnapshot) {
+    attemptsRef.where('studentID', isEqualTo: uid).get().then((querySnapshot) {
       querySnapshot.docs.forEach((oneMap) {
         Quiz newQ = Quiz.quizFromMap(oneMap.data() as Map<String, dynamic>);
-        attempts.add(newQ);
+        attemptsTemp.add(newQ);
       });
 
       // print()
 
+      attemptsTemp.forEach((atmpTemp) {
+        if (atmpTemp.studentID == uid) {
+          attempts.add(atmpTemp);
+        }
+      });
+      // attempts = attempts.map((oneQuiz){})
       isLoading = false;
       setState(() {});
     });

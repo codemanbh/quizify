@@ -30,7 +30,7 @@ import './pages/AllStudentAttempts.dart';
 
 // timed qBfcBdYlchWj8VmNovCA
 void main() async {
-  await dotenv.load(); // loud the env variables
+  await dotenv.load(fileName: 'assets/.env'); // loud the env variables
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -52,8 +52,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      initialRoute:
-          '/createQuizPage', // change to what you are currently work on
+      initialRoute: '/loginPage', // change to what you are currently work on
       // change to what you are currently work on
       routes: {
         // all the routs (pages) in the app
